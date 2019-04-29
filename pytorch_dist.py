@@ -163,16 +163,20 @@ def validate(val_loader, model, criterion):
     return top1.avg
 
 if __name__ == '__main__':
+    
+    initial_time = time.time()
     print("Collect Inputs...")
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
+    parser.add_argument("--dir", type=str, default='./data')
     args = parser.parse_args()
-
+    
+    print("Data Directory: {}".format(args.dir))
 
     # Batch Size for training and testing
     batch_size = 32
-
+    
     # Number of additional worker processes for dataloading
     workers = 2
 
@@ -182,16 +186,8 @@ if __name__ == '__main__':
     # Starting Learning Rate
     starting_lr = 0.1
 
-    # Number of distributed processes
-    world_size = 2
-
     # Distributed backend type
     dist_backend = 'nccl'
-
-    # Url used to setup distributed training
-    dist_url = "tcp://172.31.44.30:23456"
-
-
 
     print("Initialize Process Group...")
     # Initialize Process Group
@@ -204,6 +200,7 @@ if __name__ == '__main__':
 
     torch.cuda.set_device(args.local_rank)
 
+    #torch.distributed.init_process_group(backend=dist_backend, init_method="file:///home/ubuntu/cloud/trainfile")
     torch.distributed.init_process_group(backend=dist_backend,
                                          init_method='env://')
     torch.multiprocessing.set_start_method('spawn')
@@ -237,8 +234,8 @@ if __name__ == '__main__':
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
     # Initialize Datasets. STL10 will automatically download if not present
-    trainset = datasets.STL10(root='./data', split='train', download=True, transform=transform)
-    valset = datasets.STL10(root='./data', split='test', download=True, transform=transform)
+    trainset = datasets.STL10(root=args.dir, split='train', download=True, transform=transform)
+    valset = datasets.STL10(root=args.dir, split='test', download=True, transform=transform)
 
     # Create DistributedSampler to handle distributing the dataset across nodes when training
     # This can only be called after torch.distributed.init_process_group is called
@@ -273,3 +270,4 @@ if __name__ == '__main__':
         print("Epoch Summary: ")
         print("\tEpoch Accuracy: {}".format(prec1))
         print("\tBest Accuracy: {}".format(best_prec1))
+    print("total time: {}".format(time.time()-initial_time))
