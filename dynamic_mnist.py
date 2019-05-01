@@ -23,7 +23,9 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.utils import data
-from torch.utils.data.distributed import DistributedSampler
+#from torch.utils.data.distributed import DistributedSampler
+from dynamic_dataloader import DistributedSampler
+from dynamic_dataparallel import DistributedDataParallel
 
 class Average(object):
     def __init__(self):
@@ -69,6 +71,7 @@ class Trainer(object):
         self.train_loader = train_loader
         self.test_loader = test_loader
         self.loss = loss
+        self.timer = 0
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
@@ -76,6 +79,8 @@ class Trainer(object):
             train_loss, train_acc = self.train()
             test_loss, test_acc = self.evaluate()
             epoch_time = time.time()-epoch_start
+            # updating the batch dynamically
+            self.train_loader.sampler.update_load(self.timer)
             print(
                 'Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
@@ -87,21 +92,44 @@ class Trainer(object):
         train_acc = Accuracy()
 
         self.net.train()
-
+        self.net.set_timer(0)
+        
+        loss_timer = 0
+        backward_timer = 0
+        opti_timer = 0
+        
         for data, label in self.train_loader:
             data = data.cuda(non_blocking=True)
             label = label.cuda(non_blocking=True)
-
+            # forward is called here
             output = self.net(data)
+            
+            loss_start = time.time()
+            
             loss = self.loss(output, label)
-
+            
+            
+            
             self.optimizer.zero_grad()
+            
+            backward_start = time.time()
+            loss_timer += backward_start - loss_start
+            
             loss.backward()
+            
+            opti_start = time.time()
+            backward_timer += opti_start-backward_start
+            
             self.optimizer.step()
+            
+            opti_timer += time.time() - opti_start
 
             train_loss.update(loss.item(), data.size(0))
             train_acc.update(output, label)
-
+        self.timer = self.net.get_timer()
+        print("Forward Time : {}s".format(self.net.get_timer()))
+        print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
+        print("---")
         return train_loss, train_acc
 
     def evaluate(self):
@@ -204,7 +232,7 @@ if __name__ == '__main__':
     # Construct Model
     model = Net().cuda()
     # Make model DistributedDataParallel
-    model = torch.nn.parallel.DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
+    model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
     loss = nn.CrossEntropyLoss().cuda()

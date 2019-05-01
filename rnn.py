@@ -72,15 +72,13 @@ class Trainer(object):
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
-            epoch_start = time.time()
             train_loss, train_acc = self.train()
             test_loss, test_acc = self.evaluate()
-            epoch_time = time.time()-epoch_start
+
             print(
                 'Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
-                'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
-                'epoch time: {}'.format(epoch_time))
+                'test loss: {}, test acc: {}.'.format(test_loss, test_acc))
 
     def train(self):
         train_loss = Average()
@@ -124,15 +122,64 @@ class Trainer(object):
         return test_loss, test_acc
 
 
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-        self.fc = nn.Linear(784, 10)
+class Rnn(nn.Module):
+    
+    def __init__(self,vocab,hidden_size,n_cat,bs=16,nl=5):
+        super().__init__()
+        self.hidden_size = hidden_size
+        self.bs = bs
+        self.nl = nl
+        self.e = nn.Embedding(n_vocab,hidden_size)
+        self.rnn = nn.LSTM(hidden_size,hidden_size,nl)
+        self.fc2 = nn.Linear(hidden_size,n_cat)
+        self.softmax = nn.LogSoftmax(dim=-1)
+        
+    def forward(self,inp):
+        bs = inp.size()[1]
+        if bs != self.bs:
+            self.bs = bs
+        e_out = self.e(inp)
+        h0 = c0 = Variable(e_out.data.new(*(self.nl,self.bs,self.hidden_size)).zero_())
+        rnn_o,_ = self.rnn(e_out,(h0,c0)) 
+        rnn_o = rnn_o[-1]
+        fc = F.dropout(self.fc2(rnn_o),p=0.8)
+        return self.softmax(fc)
 
-    def forward(self, x):
-        return self.fc(x.view(x.size(0), -1))
+    
+def fit(epoch,model,data_loader,phase='training',volatile=False,is_cuda = False):
+    if phase == 'training':
+        model.train()
+    if phase == 'validation':
+        model.eval()
+        volatile=True
+    running_loss = 0.0
+    running_correct = 0
+    for batch_idx , batch in enumerate(data_loader):
+        text , target = batch.review , batch.rating-1
+        if is_cuda:
+            text,target = text.cuda(),target.cuda()
+        
+        if phase == 'training':
+            optimizer.zero_grad()
+        output = model(text)
+        loss = F.nll_loss(output,target)
+        
+        print(batch_idx)
+        print(loss.data)
+        running_loss += F.nll_loss(output,target,size_average=False).data
+        preds = output.data.max(dim=1,keepdim=True)[1]
+        running_correct += preds.eq(target.data.view_as(preds)).cpu().sum()
+        if phase == 'training':
+            loss.backward()
+            optimizer.step()
+    running_correct = float(running_correct)
+    loss = running_loss/len(data_loader.dataset)
+    accuracy = 100. * running_correct/len(data_loader.dataset)
+    #print(accuracy)
+    print(f'{phase} loss is {loss:{5}.{2}} and {phase} accuracy is {running_correct}/{len(data_loader.dataset)}{accuracy:{10}.{4}}')
+    return loss,accuracy
 
-
+    
 def get_dataloader(root, batch_size):
     transform = transforms.Compose(
         [transforms.ToTensor(),
@@ -164,29 +211,25 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
     parser.add_argument("--dir", type=str, default='./data')
-    parser.add_argument("--batch", type=int, default=32)
-    parser.add_argument("--epochs", type=int, default=10)
     args = parser.parse_args()
     
-    
+    print("Data Directory: {}".format(args.dir))
 
     # Batch Size for training and testing
-    batch_size = args.batch
+    batch_size = 32
     
     # Number of additional worker processes for dataloading
     workers = 2
 
     # Number of epochs to train for
-    num_epochs = args.epochs
+    num_epochs = 1
 
     # Starting Learning Rate
     starting_lr = 0.1
 
     # Distributed backend type
     dist_backend = 'nccl'
-    print("Data Directory: {}".format(args.dir))
-    print("Batch Size: {}".format(args.batch))
-    print("Max Number of Epochs: {}".format(args.epochs))
+
     print("Initialize Process Group...")
 
     torch.cuda.set_device(args.local_rank)
