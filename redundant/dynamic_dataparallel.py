@@ -265,7 +265,6 @@ class DistributedDataParallel(Module):
         self.module = module
         self.broadcast_buffers = broadcast_buffers
         self.find_unused_parameters = find_unused_parameters
-        self.timer = None
 
         if check_reduction:
             # This argument is no longer used since the reducer
@@ -370,61 +369,29 @@ class DistributedDataParallel(Module):
                                "init_process_group and have not passed "
                                "process_group argument to DDP constructor")
 
-    def forward_no_timer(self, *inputs, **kwargs):
-        self._sync_params()
-        if self.device_ids:
-            inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
-            if len(self.device_ids) == 1:
-                output = self.module(*inputs[0], **kwargs[0])
-            else:
-                outputs = self.parallel_apply(self._module_copies[:len(inputs)], inputs, kwargs)
-                output = self.gather(outputs, self.output_device)
-        else:
-            output = self.module(*inputs, **kwargs)
-
-        if torch.is_grad_enabled():
-            # We'll return the output object verbatim since it is a freeform
-            # object. We need to find any tensors in this object, though,
-            # because we need to figure out which parameters were used during
-            # this forward pass, to ensure we short circuit reduction for any
-            # unused parameters. Only if `find_unused_parameters` is set.
-            if self.find_unused_parameters:
-                self.reducer.prepare_for_backward(list(_find_tensors(output)))
-            else:
-                self.reducer.prepare_for_backward([])
-        return output
-    
-    def forward_timer(self, *inputs, **kwargs):
-        start_time = time.time()
-        self._sync_params()
-        if self.device_ids:
-            inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
-            if len(self.device_ids) == 1:
-                output = self.module(*inputs[0], **kwargs[0])
-            else:
-                outputs = self.parallel_apply(self._module_copies[:len(inputs)], inputs, kwargs)
-                output = self.gather(outputs, self.output_device)
-        else:
-            output = self.module(*inputs, **kwargs)
-
-        if torch.is_grad_enabled():
-            # We'll return the output object verbatim since it is a freeform
-            # object. We need to find any tensors in this object, though,
-            # because we need to figure out which parameters were used during
-            # this forward pass, to ensure we short circuit reduction for any
-            # unused parameters. Only if `find_unused_parameters` is set.
-            if self.find_unused_parameters:
-                self.reducer.prepare_for_backward(list(_find_tensors(output)))
-            else:
-                self.reducer.prepare_for_backward([])
-        self.timer += time.time()-start_time
-        return output
-    
     def forward(self, *inputs, **kwargs):
-        if (self.timer!=None):
-            return self.forward_timer(*inputs, **kwargs)
+        self._sync_params()
+        if self.device_ids:
+            inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
+            if len(self.device_ids) == 1:
+                output = self.module(*inputs[0], **kwargs[0])
+            else:
+                outputs = self.parallel_apply(self._module_copies[:len(inputs)], inputs, kwargs)
+                output = self.gather(outputs, self.output_device)
         else:
-            return self.forward_no_timer(*inputs, **kwargs)
+            output = self.module(*inputs, **kwargs)
+
+        if torch.is_grad_enabled():
+            # We'll return the output object verbatim since it is a freeform
+            # object. We need to find any tensors in this object, though,
+            # because we need to figure out which parameters were used during
+            # this forward pass, to ensure we short circuit reduction for any
+            # unused parameters. Only if `find_unused_parameters` is set.
+            if self.find_unused_parameters:
+                self.reducer.prepare_for_backward(list(_find_tensors(output)))
+            else:
+                self.reducer.prepare_for_backward([])
+        return output
     
     def set_timer(self, val):
         self.timer = val
