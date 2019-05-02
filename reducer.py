@@ -1,12 +1,12 @@
 #!/usr/bin/python
-
 import sys
-from statistics import mode
 from collections import Counter
+import pickle
+import boto3
 
-prev_text = None
+res = []
 scores = []
-print('score,text')
+prev_text = None
 for line in sys.stdin:
     try:
         text, score = line.split( '\t' )
@@ -16,7 +16,7 @@ for line in sys.stdin:
                 c = Counter(scores)
                 top_scores = c.most_common(5)
                 top_scores.sort()
-                print(top_scores[0][0] + ',' + prev_text)
+                res.append((top_scores[0][0],prev_text))
             prev_text = text
             scores = []
         scores.append(score[:-1])
@@ -24,4 +24,11 @@ for line in sys.stdin:
 
 top_scores = c.most_common(5)
 top_scores.sort()
-print(top_scores[0][0] + ',' + prev_text)
+res.append((top_scores[0][0],prev_text))
+obj = pickle.dumps(res)
+
+# save to s3 
+bucket = 'YOUR BUCKET'
+key = 'data.p'
+s3 = boto3.resource('s3')
+s3.Object(bucket, key).put(Body=obj)
