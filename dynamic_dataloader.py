@@ -7,9 +7,10 @@ import torch.distributed as dist
 
 class DynamicDistributedSampler(DistributedSampler):
 
-    def __init__(self, **kwargs):
-        super(DynamicDistributedSampler, self).__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super(DynamicDistributedSampler, self).__init__(*args, **kwargs)
         self.split = None#[0, 15000, 60000]
+        self.world_size = dist.get_world_size()
 
     def __iter__(self):
         # deterministically shuffle based on epoch     
@@ -32,4 +33,5 @@ class DynamicDistributedSampler(DistributedSampler):
         cum = (inv/inv.sum()).cumsum()
         cum[-1] = 1.
         split = [0]+(cum*self.total_size).astype(int).tolist()
+        # change split here
         print(split)
