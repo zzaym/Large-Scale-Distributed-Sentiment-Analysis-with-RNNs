@@ -24,7 +24,8 @@ class DynamicDistributedSampler(DistributedSampler):
             indices = indices[self.split[self.rank]:self.split[self.rank+1]]
             return iter(indices)
 
-    def update_load(self, epoch_time):
+    def update_load(self, epoch_time, total_batch):
+        # returns the split batch size to reupdate
         time_list = [torch.zeros(1).cuda() for _ in range(self.world_size)]
         dist.all_gather(time_list, torch.tensor(epoch_time).cuda())
         print(time_list)

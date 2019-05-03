@@ -189,11 +189,14 @@ def get_dataloader(root, batch_size, workers = 0):
 #     else:
 #         batch_size = 48
     print("batch", batch_size)
+    time_loader = time.time()
     train_loader = data.DataLoader(
         train_set,
         batch_size=batch_size,
         shuffle=(sampler is None),
         sampler=sampler, num_workers = workers)
+    
+    print("initialize loader ... ", time.time()-time_loader)
 
     test_loader = data.DataLoader(
         datasets.MNIST(root, train=False, transform=transform, download=True),
