@@ -25,6 +25,7 @@ from torch import nn
 from torch.utils import data
 #from torch.utils.data.distributed import DistributedSampler
 from dynamic_dataloader import DynamicDistributedSampler as DistributedSampler
+from dynamic_dataloader import get_dynamic_loader
 #from dynamic_dataparallel import DistributedDataParallel
 from torch.nn.parallel.distributed import DistributedDataParallel
 
@@ -73,6 +74,7 @@ class Trainer(object):
         self.test_loader = test_loader
         self.loss = loss
         self.timer = 0
+        self.total_batch = train_loader.batch_size*dist.get_world_size()
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
@@ -83,12 +85,16 @@ class Trainer(object):
             test_loss, test_acc = self.evaluate()
             epoch_time = time.time()-epoch_start
             # updating the batch dynamically
-            self.train_loader.sampler.update_load(self.timer)
+            # self.train_loader.sampler.update_load(self.timer, 100)
+            #if (epoch == 1):
+            # pass the dynamic_step argument here
+            self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
             print(
                 'Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
                 'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
                 'epoch time: {}'.format(epoch_time))
+            print("---")
 
     def train(self):
         train_loss = Average()
@@ -143,7 +149,6 @@ class Trainer(object):
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
         print("Update Time", update_timer)
         print("Load Time", load_timer)
-        print("---")
         return train_loss, train_acc
 
     def evaluate(self):
@@ -218,6 +223,9 @@ if __name__ == '__main__':
     parser.add_argument("--batch", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
+    # 0 only updates the dataloader dynamically after the 1st epoch
+    # if not updates every given argument
+    parser.add_argument("--dynamic", type=int, default=0)
     args = parser.parse_args()
     
     
@@ -233,6 +241,8 @@ if __name__ == '__main__':
 
     # Starting Learning Rate
     starting_lr = 0.1
+
+    dynamic_step = args.dynamic
 
     # Distributed backend type
     dist_backend = 'nccl'
