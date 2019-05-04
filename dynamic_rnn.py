@@ -28,6 +28,7 @@ from dynamic_dataloader import get_dynamic_loader
 # from dynamic_dataparallel import DistributedDataParallel
 from torch.nn.parallel.distributed import DistributedDataParallel
 from amz_loader import DatasetAmazon
+from sklearn.metrics import f1_score
 
 
 class Average(object):
@@ -58,6 +59,8 @@ class Accuracy(object):
 
         self.correct += correct
         self.count += output.size(0)
+        # add f1 score as metrics
+        self.f1_score = f1_score(label.long().data, predictions,average = 'macro')
 
     @property
     def accuracy(self):
@@ -65,7 +68,7 @@ class Accuracy(object):
 
     @property
     def f1_score(self):
-        pass
+        return self.f1_score
     
     def __str__(self):
         return '{:.2f}%'.format(self.accuracy * 100)
