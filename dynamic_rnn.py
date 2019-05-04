@@ -22,9 +22,10 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.utils import data
-#from torch.utils.data.distributed import DistributedSampler
+# from torch.utils.data.distributed import DistributedSampler
 from dynamic_dataloader import DynamicDistributedSampler as DistributedSampler
-#from dynamic_dataparallel import DistributedDataParallel
+from dynamic_dataloader import get_dynamic_loader
+# from dynamic_dataparallel import DistributedDataParallel
 from torch.nn.parallel.distributed import DistributedDataParallel
 from amz_loader import DatasetAmazon
 
@@ -52,8 +53,8 @@ class Accuracy(object):
         self.count = 0
 
     def update(self, output, label):
-        predictions = output.data.argmax(dim=1)
-        correct = predictions.eq(label.data).sum().item()
+        predictions = output.round().long().data
+        correct = predictions.eq(label.long().data).sum().item()
 
         self.correct += correct
         self.count += output.size(0)
@@ -62,6 +63,10 @@ class Accuracy(object):
     def accuracy(self):
         return self.correct / self.count
 
+    @property
+    def f1_score(self):
+        pass
+    
     def __str__(self):
         return '{:.2f}%'.format(self.accuracy * 100)
 
@@ -74,6 +79,7 @@ class Trainer(object):
         self.test_loader = test_loader
         self.loss = loss
         self.timer = 0
+        self.total_batch = train_loader.batch_size*dist.get_world_size()
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
@@ -84,7 +90,10 @@ class Trainer(object):
             test_loss, test_acc = self.evaluate()
             epoch_time = time.time()-epoch_start
             # updating the batch dynamically
-            self.train_loader.sampler.update_load(self.timer)
+            # self.train_loader.sampler.update_load(self.timer, 100)
+            #if (epoch == 1):
+            # pass the dynamic_step argument here
+            self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
             print(
                 'Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
@@ -138,8 +147,7 @@ class Trainer(object):
             update_timer += time.time() - update_start
             #total_timer += time.time() - start_time
             load_start = time.time()
-        print(len(data))
-        self.timer = backward_timer
+        self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
         print("Update Time", update_timer)
@@ -159,7 +167,7 @@ class Trainer(object):
                 label = label.cuda(non_blocking=True)
 
                 output = self.net(data)
-                loss = F.cross_entropy(output, label)
+                loss = self.loss(output, label)
 
                 test_loss.update(loss.item(), data.size(0))
                 test_acc.update(output, label)
@@ -170,26 +178,21 @@ class Trainer(object):
 class RNN(nn.Module):   
     def __init__(self, n_vocab):
         super().__init__()
-        self.hidden_size = 100
-        self.bs = 32
-        self.nl = 5
-        self.e = nn.Embedding(n_vocab, self.hidden_size)
-        self.rnn = nn.LSTM(self.hidden_size, self.hidden_size, self.nl)
-        self.fc1 = nn.Linear(self.hidden_size,self.hidden_size)
-        self.fc2 = nn.Linear(self.hidden_size, 5)
-        self.softmax = nn.LogSoftmax(dim=-1)
+        self.n_vocab = n_vocab
+        self.embedding_size = 100
+        self.hidden_size = 64
+        self.num_layers = 5
+        self.word_embeddings = nn.Embedding(self.n_vocab, self.embedding_size)
+        self.lstm = nn.LSTM(self.embedding_size, self.hidden_size, self.num_layers, \
+                        batch_first=True, dropout=0.8)
+        self.fc = nn.Linear(self.hidden_size, 1)
+        self.relu = nn.ReLU()
         
-    def forward(self,inp):
-        inp = inp.transpose(0,1)
-        e_out = self.e(inp) # 50,32,150,size 
-        h0 = c0 = Variable(e_out.data.new(*(self.nl,self.bs,self.hidden_size)).zero_())
-        rnn_o,_ = self.rnn(e_out,(h0,c0)) 
-        rnn_o = rnn_o[-1]
-        fc1 = F.dropout(self.fc1(rnn_o),p = 0.8)
-        #output,hid = self.grn(e_out)
-        #fc1 = F.dropout(self.fc1(output),p = 0.8)
-        fc = self.fc2(fc1)
-        return self.softmax(fc)
+    def forward(self, sentence):
+        embeds = self.word_embeddings(sentence)
+        lstm_out, _ = self.lstm(embeds)
+        tag_space = self.fc(lstm_out[:,-1,:])
+        return self.relu(tag_space) 
 
 
 def get_dataloader(root, batch_size, workers = 0):
@@ -215,6 +218,7 @@ if __name__ == '__main__':
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--n_vocab", type=int, default=1e4)
+    parser.add_argument("--dynamic", type=int, default=0)
     args = parser.parse_args()
     
     # class_weight
@@ -231,6 +235,11 @@ if __name__ == '__main__':
 
     # Number of epochs to train for
     num_epochs = args.epochs
+
+    # dynmaic step
+    # 0 only updates the dataloader dynamically after the 1st epoch
+    # if not updates every given argument
+    dynamic_step = args.dynamic
 
     # Starting Learning Rate
     starting_lr = 0.05
@@ -261,7 +270,7 @@ if __name__ == '__main__':
     model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
-    loss = nn.CrossEntropyLoss(weights).cuda()
+    loss = nn.MSELoss().cuda()
     optimizer = torch.optim.SGD(model.parameters(), starting_lr, momentum=0.9, weight_decay=1e-4)
 
     print("Initialize Dataloaders...")
