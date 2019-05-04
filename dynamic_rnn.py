@@ -67,8 +67,16 @@ class Accuracy(object):
         return self.correct / self.count
 
     @property
-    def f1_score(self):
-        return self.f1_score
+    def f1_score(self,pred,label):
+        total = 0
+        for tag in [0,1,2,3,4]:
+            pos = torch.eq(pred,tag).sum().to(dtype = torch.float)
+            tp = torch.eq(label[torch.eq(pred,tag)],tag).sum().to(dtype = torch.float)
+            precision = tp/pos
+            fn = torch.eq(label[1-torch.eq(pred,tag)],tag).sum().to(dtype = torch.float)
+            recall = tp/torch.add(tp,fn).to(dtype = torch.float)
+            total += 2*(precision*recall)/(precision + recall)
+        return total/5
     
     def __str__(self):
         return '{:.2f}%'.format(self.accuracy * 100)
