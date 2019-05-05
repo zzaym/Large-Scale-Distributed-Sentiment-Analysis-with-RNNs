@@ -6,7 +6,7 @@ class DatasetAmazon(Dataset):
     def __init__(self, path):
         self.f = h5py.File(path,'r')
         self.keyname = list(self.f.keys())
-        self.size = min([len(f[key]) for key in self.keyname])
+        self.size = min([len(self.f[key]) for key in self.keyname])
         
     def __len__(self):
         return len(self.keyname) * self.size - 1

@@ -54,8 +54,8 @@ class Accuracy(object):
         self.count = 0
 
     def update(self, output, label):
-        predictions = torch.sigmoid(output).round().long().data
-        correct = predictions.eq(label.data).sum().item()
+        pred = output.ge(torch.zeros_like(output)).data
+        correct = pred.eq(label.data).sum().item()
 
         self.correct += correct
         self.count += output.size(0)
@@ -70,30 +70,31 @@ class Accuracy(object):
 
 class F1_Score(object):
     def __init__(self):
-        self.pos = torch.zeros(2)
-        self.tp = torch.zeros(2)
-        self.fn = torch.zeros(2)
-        self.score = torch.zeros(2)
+        self.pos = torch.zeros(1)
+        self.tp = torch.zeros(1)
+        self.fn = torch.zeros(1)
+        self.eps = 1e-9
 
     def update(self, output, label):
-        for tag in range(2):
-            self.pos[tag] += torch.eq(output, tag).sum().to(dtype = torch.float)
-            self.tp[tag] += torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            precision = self.tp[tag] / self.pos[tag]
-            self.fn[tag] += torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            recall = self.tp[tag] / torch.add(self.tp[tag], self.fn[tag]).to(dtype = torch.float)
-            self.score[tag] = 0 if precision == 0 and recall == 0 else 2 * (precision * recall) / (precision + recall) 
-
+        pred = output.ge(torch.zeros_like(output)).float()
+        label = label.float()
+        self.pos += pred.sum()
+        self.tp += (pred * label).sum()
+        self.fn += ((1-pred) * (1-label)).sum()
+        
     @property
     def f1_score(self):
-        return self.score.mean().cpu().data.numpy()
+        precision = self.tp.div(self.pos.add(self.eps))
+        recall = self.tp.div(self.tp.add(self.fn).add(self.eps))
+        return (precision*recall).div(precision+recall+self.eps).mul(2).item()
     
     def __str__(self):
+        print(self.f1_score)
         return '{:.2f}%'.format(self.f1_score)
 
 
 class Trainer(object):
-    def __init__(self, net, optimizer, train_loader, test_loader, loss, dynamic):
+    def __init__(self, net, optimizer, train_loader, test_loader, loss, dynamic, filename='checkpoint.pth.tar'):
         self.net = net
         self.optimizer = optimizer
         self.train_loader = train_loader
@@ -101,24 +102,25 @@ class Trainer(object):
         self.loss = loss
         self.timer = 0
         self.total_batch = train_loader.batch_size*dist.get_world_size()
+        self.dynamic = dynamic
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
             epoch_start = time.time()
-            train_loss = self.train()
+            train_loss, train_f1 = self.train()
             train_time = time.time() - epoch_start
             print("Train Time: ", train_time)
             test_loss, test_acc, test_f1 = self.evaluate()
             epoch_time = time.time()-epoch_start
             # updating the batch dynamically
             # self.train_loader.sampler.update_load(self.timer, 100)
-            if (dynamic == 0 and epoch == 1) or dynamic > 0:
+            if (self.dynamic == 0 and epoch == 1) or self.dynamic > 0:
                 self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
             print('Epoch: {}/{},'.format(epoch, epochs),
-                'train loss: {}, train acc: {},'.format(train_loss, train_acc),
-                'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
+                'train loss: {}, train f1: {},'.format(train_loss, train_f1),
+                'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
                 'epoch time: {}'.format(epoch_time))
-        torch.save(self.net, '.')
+        torch.save(self.net, filename)
 
     def train(self):
         train_loss = Average()
@@ -171,7 +173,7 @@ class Trainer(object):
             load_start = time.time()
 
             i += 1
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 print('Iter {}, Train Loss: {}, F1: {}'.format(i+1, train_loss, train_f1))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
@@ -179,7 +181,7 @@ class Trainer(object):
         print("Update Time", update_timer)
         print("Load Time", load_timer)
         print("---")
-        return train_loss
+        return train_loss, train_f1
 
     def evaluate(self):
         test_loss = Average()
@@ -224,7 +226,7 @@ class RNN(nn.Module):
 
 
 def get_dataloader(root, batch_size, workers = 0):
-    amazon = DatasetAmazon(root, 2650000)
+    amazon = DatasetAmazon(root)
     train_length = int(0.9 * len(amazon))
     test_length = len(amazon)-train_length
     amz_train, amz_test = random_split(amazon,(train_length,test_length))
@@ -298,7 +300,7 @@ if __name__ == '__main__':
     model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
-    weight = torch.FloatTensor([1]).cuda()
+    weight = torch.FloatTensor([0.2]).cuda()
     loss = nn.BCEWithLogitsLoss(pos_weight=weight).cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr)
 
