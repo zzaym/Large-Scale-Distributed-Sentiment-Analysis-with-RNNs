@@ -1,17 +1,18 @@
 from torch.utils.data import Dataset
-from torch.autograd import Variable
-import pickle
+import torch
+import h5pickle as h5py
 
 class DatasetAmazon(Dataset):
     def __init__(self, path):
-    	with open(path, 'rb') as f:
-        	self.data = pickle.load(f)
-
+        self.f = h5py.File(path,'r')
+        self.keyname = list(self.f.keys())
+        
     def __len__(self):
-    	return len(self.data)
+        return len(self.keyname)
     
     def __getitem__(self, index):
-        text = self.data[index][:-1] # up to the last one is text
-        label = self.data[index][-1]
-        label = label - 1  
-        return Variable(text), Variable(label)
+        line = self.f[self.keyname[index]][:]
+        text = line[:-1] # up to the last one is text
+        label = line[-1:]
+        label = (label > 3) * 1
+        return torch.LongTensor(text), torch.LongTensor(label)

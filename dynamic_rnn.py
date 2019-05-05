@@ -17,7 +17,7 @@ import torchvision.datasets as datasets
 import torchvision.models as models
 from torch.autograd import Variable
 from torch.multiprocessing import Pool, Process
-
+from torch.utils.data import random_split
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -54,32 +54,41 @@ class Accuracy(object):
         self.count = 0
 
     def update(self, output, label):
-        predictions = output.round().long().data
-        correct = predictions.eq(label.long().data).sum().item()
+        predictions = torch.sigmoid(output).round().long().data
+        correct = predictions.eq(label.data).sum().item()
 
         self.correct += correct
         self.count += output.size(0)
-        # add f1 score as metrics
-        self.f1_score = f1_score(label.long().data, predictions,average = 'macro')
 
     @property
     def accuracy(self):
         return self.correct / self.count
 
-    @property
-    def f1_score(self,pred,label):
-        total = 0
-        for tag in [0,1,2,3,4]:
-            pos = torch.eq(pred,tag).sum().to(dtype = torch.float)
-            tp = torch.eq(label[torch.eq(pred,tag)],tag).sum().to(dtype = torch.float)
-            precision = tp/pos
-            fn = torch.eq(label[1-torch.eq(pred,tag)],tag).sum().to(dtype = torch.float)
-            recall = tp/torch.add(tp,fn).to(dtype = torch.float)
-            total += 2*(precision*recall)/(precision + recall)
-        return total/5
-    
     def __str__(self):
         return '{:.2f}%'.format(self.accuracy * 100)
+
+
+class F1_Score(object):
+    def __init__(self):
+        pass
+
+    def update(self, output, label):
+        total = 0
+        for tag in range(5):
+            pos = torch.eq(output, tag).sum().to(dtype = torch.float)
+            tp = torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            precision = tp / pos
+            fn = torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            recall = tp / torch.add(tp,fn).to(dtype = torch.float)
+            total += 2 * (precision * recall) / (precision + recall)
+        self.f1_score = total / 5
+
+    @property
+    def f1_score(self):
+        return self.f1_score
+    
+    def __str__(self):
+        return '{:.2f}%'.format(self.f1_score)
 
 
 class Trainer(object):
@@ -105,8 +114,7 @@ class Trainer(object):
             #if (epoch == 1):
             # pass the dynamic_step argument here
             self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
-            print(
-                'Epoch: {}/{},'.format(epoch, epochs),
+            print('Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
                 'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
                 'epoch time: {}'.format(epoch_time))
@@ -117,7 +125,6 @@ class Trainer(object):
         
         begin_time = time.time()
 
-        self.net.train()
         print("Self.net.train: ", time.time()-begin_time)
         forward_timer = 0
         loss_timer = 0
@@ -128,6 +135,8 @@ class Trainer(object):
         load_timer = 0
         count = 0
         load_start = time.time()
+        self.net.train()
+        i = 0
         for data, label in self.train_loader:
             load_timer += time.time()-load_start
             #start_time = time.time()
@@ -139,7 +148,7 @@ class Trainer(object):
             forward_timer += time.time()-forward_start
 
             loss_start = time.time()
-            loss = self.loss(output, label)
+            loss = self.loss(output, label.float())
             
             self.optimizer.zero_grad()
             
@@ -155,9 +164,14 @@ class Trainer(object):
             opti_timer += update_start - opti_start
             train_loss.update(loss.item(), data.size(0))
             train_acc.update(output, label)
+            # train_f1.update(output, label)
             update_timer += time.time() - update_start
-            #total_timer += time.time() - start_time
+            # total_timer += time.time() - start_time
             load_start = time.time()
+
+            i += 1
+            if i % 100 == 0:
+                print('Iter {}, Train Loss: {}, Train Acc: {}'.format(i+1, train_loss, train_acc))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
@@ -171,14 +185,13 @@ class Trainer(object):
         test_acc = Accuracy()
 
         self.net.eval()
-
         with torch.no_grad():
             for data, label in self.test_loader:
                 data = data.cuda(non_blocking=True)
                 label = label.cuda(non_blocking=True)
 
                 output = self.net(data)
-                loss = self.loss(output, label)
+                loss = self.loss(output, label.float())
 
                 test_loss.update(loss.item(), data.size(0))
                 test_acc.update(output, label)
@@ -191,24 +204,27 @@ class RNN(nn.Module):
         super().__init__()
         self.n_vocab = n_vocab
         self.embedding_size = 100
-        self.hidden_size = 64
-        self.num_layers = 5
+        self.hidden_size = 32
+        self.num_layers = 2
         self.word_embeddings = nn.Embedding(self.n_vocab, self.embedding_size)
-        self.lstm = nn.LSTM(self.embedding_size, self.hidden_size, self.num_layers, \
-                        batch_first=True, dropout=0.8)
-        self.fc = nn.Linear(self.hidden_size, 1)
+        self.lstm = nn.LSTM(self.embedding_size, self.hidden_size, self.num_layers, dropout=0.5)
+        self.fc1 = nn.Linear(self.hidden_size, self.hidden_size)
+        self.fc2 = nn.Linear(self.hidden_size, 1)
         self.relu = nn.ReLU()
         
     def forward(self, sentence):
         embeds = self.word_embeddings(sentence)
-        lstm_out, _ = self.lstm(embeds)
-        tag_space = self.fc(lstm_out[:,-1,:])
-        return self.relu(tag_space) 
+        lstm_out, _ = self.lstm(embeds.permute(1,0,2))
+        fc1_out = self.fc1(lstm_out[-1])
+        fc2_out = self.fc2(self.relu(fc1_out))
+        return fc2_out 
 
 
 def get_dataloader(root, batch_size, workers = 0):
-    train_path, test_path = root + '/train.p', root + '/test.p'
-    amz_train, amz_test = DatasetAmazon(train_path), DatasetAmazon(test_path)
+    amazon = DatasetAmazon(root)
+    train_length = int(0.9 * len(amazon))
+    test_length = len(amazon)-train_length
+    amz_train, amz_test = random_split(amazon,(train_length,test_length))
     sampler = DistributedSampler(amz_train)
     train_loader = data.DataLoader(amz_train, shuffle=(sampler is None), batch_size=batch_size, \
                         sampler=sampler, num_workers=workers, drop_last=True)
@@ -224,16 +240,13 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
-    parser.add_argument("--dir", type=str, default='./data')
+    parser.add_argument("--dir", type=str, default='data.h5')
     parser.add_argument("--batch", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--n_vocab", type=int, default=1e4)
     parser.add_argument("--dynamic", type=int, default=0)
     args = parser.parse_args()
-    
-    # class_weight
-    weights = torch.FloatTensor([47.0,41.0,13.0,4.9,1.48]).cuda()
     
     # number of vocabulary
     num_vocab = args.n_vocab
@@ -266,7 +279,7 @@ if __name__ == '__main__':
 
     torch.distributed.init_process_group(backend=dist_backend,
                                          init_method='env://')
-    torch.multiprocessing.set_start_method('spawn')
+    torch.multiprocessing.set_start_method('spawn', force=True)
 
 
     # Establish Local Rank and set device on this node
@@ -281,8 +294,8 @@ if __name__ == '__main__':
     model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
-    loss = nn.MSELoss().cuda()
-    optimizer = torch.optim.SGD(model.parameters(), starting_lr, momentum=0.9, weight_decay=1e-4)
+    loss = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([5]).cuda()).cuda()
+    optimizer = torch.optim.SGD(model.parameters(), starting_lr, momentum=0.9)
 
     print("Initialize Dataloaders...")
     train_loader, test_loader = get_dataloader(args.dir, batch_size, workers)
