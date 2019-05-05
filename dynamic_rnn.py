@@ -107,7 +107,7 @@ class Trainer(object):
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
             epoch_start = time.time()
-            train_loss, train_f1 = self.train()
+            train_loss = self.train()
             train_time = time.time() - epoch_start
             print("Train Time: ", train_time)
             test_loss, test_acc, test_f1 = self.evaluate()
@@ -117,14 +117,14 @@ class Trainer(object):
             if (self.dynamic == 0 and epoch == 1) or self.dynamic > 0:
                 self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
             print('Epoch: {}/{},'.format(epoch, epochs),
-                'train loss: {}, train f1: {},'.format(train_loss, train_f1),
+                'train loss: {},'.format(train_loss),
                 'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
                 'epoch time: {}'.format(epoch_time))
             torch.save(self.net, self.filename)
 
     def train(self):
         train_loss = Average()
-        train_f1 = F1_Score()
+        # train_f1 = F1_Score()
         begin_time = time.time()
 
         print("Self.net.train: ", time.time()-begin_time)
@@ -167,21 +167,21 @@ class Trainer(object):
             update_start = time.time()
             opti_timer += update_start - opti_start
             train_loss.update(loss.item(), data.size(0))
-            train_f1.update(output, label)
+            # train_f1.update(output, label)
             update_timer += time.time() - update_start
             # total_timer += time.time() - start_time
             load_start = time.time()
 
             i += 1
             if i % 2000 == 0:
-                print('Iter {}, Train Loss: {}, F1: {}'.format(i, train_loss, train_f1))
+                print('Iter {}, Train Loss: {}'.format(i, train_loss))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
-        print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
+        print("Loss Time: ", loss_timer, "Backward Time: ", backward_timer, "Opti Time: ", opti_timer)
         print("Update Time", update_timer)
         print("Load Time", load_timer)
-        print("---")
-        return train_loss, train_f1
+        print("------------------------------------------")
+        return train_loss
 
     def evaluate(self):
         test_loss = Average()
