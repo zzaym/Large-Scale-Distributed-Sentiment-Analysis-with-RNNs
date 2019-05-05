@@ -81,7 +81,6 @@ class F1_Score(object):
         self.pos += pred.sum()
         self.tp += (pred * label).sum()
         self.fn += ((1-pred) * (1-label)).sum()
-        print(self.pos, self.tp, self.fn)
         
     @property
     def f1_score(self):
@@ -94,7 +93,7 @@ class F1_Score(object):
 
 
 class Trainer(object):
-    def __init__(self, net, optimizer, train_loader, test_loader, loss, dynamic, filename='checkpoint.pth.tar'):
+    def __init__(self, net, optimizer, train_loader, test_loader, loss, dynamic, filename):
         self.net = net
         self.optimizer = optimizer
         self.train_loader = train_loader
@@ -121,7 +120,7 @@ class Trainer(object):
                 'train loss: {}, train f1: {},'.format(train_loss, train_f1),
                 'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
                 'epoch time: {}'.format(epoch_time))
-        torch.save(self.net, self.filename)
+            torch.save(self.net, self.filename)
 
     def train(self):
         train_loss = Average()
@@ -174,8 +173,8 @@ class Trainer(object):
             load_start = time.time()
 
             i += 1
-            if i % 100 == 0:
-                print('Iter {}, Train Loss: {}, F1: {}'.format(i+1, train_loss, train_f1))
+            if i % 2000 == 0:
+                print('Iter {}, Train Loss: {}, F1: {}'.format(i, train_loss, train_f1))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
@@ -248,15 +247,19 @@ if __name__ == '__main__':
     parser.add_argument("--local_rank", type=int)
     parser.add_argument("--dir", type=str, default='data.h5')
     parser.add_argument("--lr", type=float, default=0.01)
-    parser.add_argument("--batch", type=int, default=64)
+    parser.add_argument("--batch", type=int, default=128)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--n_vocab", type=int, default=1e4)
     parser.add_argument("--dynamic", type=int, default=-1)
+    parser.add_argument("--filename", type=str, default='checkpoint.pth.tar')
     args = parser.parse_args()
     
     # number of vocabulary
     num_vocab = args.n_vocab
+   
+    # Starting Learning Rate
+    lr = args.lr
 
     # Batch Size for training and testing
     batch_size = args.batch
@@ -272,14 +275,15 @@ if __name__ == '__main__':
     # if not updates every given argument
     dynamic_step = args.dynamic
 
-    # Starting Learning Rate
-    lr = args.lr
+    # filename
+    filename = args.filename
 
     # Distributed backend type
     dist_backend = 'nccl'
     print("Data Directory: {}".format(args.dir))
-    print("Batch Size: {}".format(args.batch))
-    print("Max Number of Epochs: {}".format(args.epochs))
+    print("Batch Size: {}".format(batch_size))
+    print("Learning rate: {}".format(lr))
+    print("Max Number of Epochs: {}".format(num_epochs))
     print("Initialize Process Group...")
 
     torch.cuda.set_device(args.local_rank)
@@ -308,7 +312,7 @@ if __name__ == '__main__':
     print("Initialize Dataloaders...")
     train_loader, test_loader = get_dataloader(args.dir, batch_size, workers)
     print("Training...")
-    trainer = Trainer(model, optimizer, train_loader, test_loader, loss, dynamic_step)
+    trainer = Trainer(model, optimizer, train_loader, test_loader, loss, dynamic_step, filename)
     trainer.fit(num_epochs)
 
     print("Total time: {:.3f}s".format(time.time()-initial_time))
