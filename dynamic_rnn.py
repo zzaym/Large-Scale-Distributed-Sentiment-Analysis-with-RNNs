@@ -54,7 +54,7 @@ class Accuracy(object):
         self.count = 0
 
     def update(self, output, label):
-        pred = output.ge(torch.zeros_like(output)).data
+        pred = output.ge(torch.zeros_like(output)).long().data
         correct = pred.eq(label.data).sum().item()
 
         self.correct += correct
@@ -81,6 +81,7 @@ class F1_Score(object):
         self.pos += pred.sum()
         self.tp += (pred * label).sum()
         self.fn += ((1-pred) * (1-label)).sum()
+        print(self.pos, self.tp, self.fn)
         
     @property
     def f1_score(self):
@@ -89,8 +90,7 @@ class F1_Score(object):
         return (precision*recall).div(precision+recall+self.eps).mul(2).item()
     
     def __str__(self):
-        print(self.f1_score)
-        return '{:.2f}%'.format(self.f1_score)
+        return '{:.2f}'.format(self.f1_score)
 
 
 class Trainer(object):
@@ -103,6 +103,7 @@ class Trainer(object):
         self.timer = 0
         self.total_batch = train_loader.batch_size*dist.get_world_size()
         self.dynamic = dynamic
+        self.filename = filename
 
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
@@ -120,7 +121,7 @@ class Trainer(object):
                 'train loss: {}, train f1: {},'.format(train_loss, train_f1),
                 'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
                 'epoch time: {}'.format(epoch_time))
-        torch.save(self.net, filename)
+        torch.save(self.net, self.filename)
 
     def train(self):
         train_loss = Average()
@@ -228,8 +229,8 @@ class RNN(nn.Module):
 def get_dataloader(root, batch_size, workers = 0):
     amazon = DatasetAmazon(root)
     train_length = int(0.9 * len(amazon))
-    test_length = len(amazon)-train_length
-    amz_train, amz_test = random_split(amazon,(train_length,test_length))
+    test_length = len(amazon) - train_length
+    amz_train, amz_test = random_split(amazon, (train_length,test_length))
     sampler = DistributedSampler(amz_train)
     train_loader = data.DataLoader(amz_train, shuffle=(sampler is None), batch_size=batch_size, \
                         sampler=sampler, num_workers=workers, drop_last=True)
