@@ -70,23 +70,23 @@ class Accuracy(object):
 
 class F1_Score(object):
     def __init__(self):
-        self.pos = 0
-        self.tp = 0
-        self.fn = 0
-        self.f1_score = torch.zeros(2)
+        self.pos = torch.zeros(2)
+        self.tp = torch.zeros(2)
+        self.fn = torch.zeros(2)
+        self.score = torch.zeros(2)
 
     def update(self, output, label):
         for tag in range(2):
-            self.pos += torch.eq(output, tag).sum().to(dtype = torch.float)
-            self.tp += torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            precision = self.tp / pos
-            self.fn += torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            self.recall = self.tp / torch.add(self.tp,self.fn).to(dtype = torch.float)
-            self.f1_score[tag] = 2 * (precision * recall) / (precision + recall)
+            self.pos[tag] += torch.eq(output, tag).sum().to(dtype = torch.float)
+            self.tp[tag] += torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            precision = self.tp[tag] / self.pos[tag]
+            self.fn[tag] += torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            recall = self.tp[tag] / torch.add(self.tp[tag], self.fn[tag]).to(dtype = torch.float)
+            self.score[tag] = 0 if precision == 0 and recall == 0 else 2 * (precision * recall) / (precision + recall) 
 
     @property
     def f1_score(self):
-        return self.f1_score
+        return self.score.mean().cpu().data.numpy()
     
     def __str__(self):
         return '{:.2f}%'.format(self.f1_score)
@@ -105,10 +105,10 @@ class Trainer(object):
     def fit(self, epochs):
         for epoch in range(1, epochs + 1):
             epoch_start = time.time()
-            train_loss, train_acc = self.train()
+            train_loss = self.train()
             train_time = time.time() - epoch_start
             print("Train Time: ", train_time)
-            test_loss, test_acc = self.evaluate()
+            test_loss, test_acc, test_f1 = self.evaluate()
             epoch_time = time.time()-epoch_start
             # updating the batch dynamically
             # self.train_loader.sampler.update_load(self.timer, 100)
@@ -118,9 +118,11 @@ class Trainer(object):
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
                 'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
                 'epoch time: {}'.format(epoch_time))
+        torch.save(self.net, '.')
 
     def train(self):
         train_loss = Average()
+        train_f1 = F1_Score()
         begin_time = time.time()
 
         print("Self.net.train: ", time.time()-begin_time)
@@ -163,13 +165,14 @@ class Trainer(object):
             update_start = time.time()
             opti_timer += update_start - opti_start
             train_loss.update(loss.item(), data.size(0))
+            train_f1.update(output, label)
             update_timer += time.time() - update_start
             # total_timer += time.time() - start_time
             load_start = time.time()
 
             i += 1
-            if i % 100 == 0:
-                print('Iter {}, Train Loss: {}'.format(i+1, train_loss))
+            if i % 1000 == 0:
+                print('Iter {}, Train Loss: {}, F1: {}'.format(i+1, train_loss, train_f1))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
@@ -241,11 +244,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
     parser.add_argument("--dir", type=str, default='data.h5')
+    parser.add_argument("--lr", type=float, default=0.01)
     parser.add_argument("--batch", type=int, default=64)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--n_vocab", type=int, default=1e4)
-    parser.add_argument("--dynamic", type=int, default=0)
+    parser.add_argument("--dynamic", type=int, default=-1)
     args = parser.parse_args()
     
     # number of vocabulary
@@ -266,7 +270,7 @@ if __name__ == '__main__':
     dynamic_step = args.dynamic
 
     # Starting Learning Rate
-    starting_lr = 0.1
+    lr = args.lr
 
     # Distributed backend type
     dist_backend = 'nccl'
@@ -294,8 +298,9 @@ if __name__ == '__main__':
     model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
-    loss = nn.BCEWithLogitsLoss(pos_weight=torch.FloatTensor([5]).cuda()).cuda()
-    optimizer = torch.optim.SGD(model.parameters(), starting_lr, momentum=0.9)
+    weight = torch.FloatTensor([1]).cuda()
+    loss = nn.BCEWithLogitsLoss(pos_weight=weight).cuda()
+    optimizer = torch.optim.Adam(model.parameters(), lr)
 
     print("Initialize Dataloaders...")
     train_loader, test_loader = get_dataloader(args.dir, batch_size, workers)
