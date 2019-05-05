@@ -70,18 +70,19 @@ class Accuracy(object):
 
 class F1_Score(object):
     def __init__(self):
-        pass
+        self.pos = 0
+        self.tp = 0
+        self.fn = 0
+        self.f1_score = torch.zeros(2)
 
     def update(self, output, label):
-        total = 0
-        for tag in range(5):
-            pos = torch.eq(output, tag).sum().to(dtype = torch.float)
-            tp = torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            precision = tp / pos
-            fn = torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
-            recall = tp / torch.add(tp,fn).to(dtype = torch.float)
-            total += 2 * (precision * recall) / (precision + recall)
-        self.f1_score = total / 5
+        for tag in range(2):
+            self.pos += torch.eq(output, tag).sum().to(dtype = torch.float)
+            self.tp += torch.eq(label[torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            precision = self.tp / pos
+            self.fn += torch.eq(label[1-torch.eq(output, tag)],tag).sum().to(dtype = torch.float)
+            self.recall = self.tp / torch.add(self.tp,self.fn).to(dtype = torch.float)
+            self.f1_score[tag] = 2 * (precision * recall) / (precision + recall)
 
     @property
     def f1_score(self):
@@ -92,7 +93,7 @@ class F1_Score(object):
 
 
 class Trainer(object):
-    def __init__(self, net, optimizer, train_loader, test_loader, loss):
+    def __init__(self, net, optimizer, train_loader, test_loader, loss, dynamic):
         self.net = net
         self.optimizer = optimizer
         self.train_loader = train_loader
@@ -111,9 +112,8 @@ class Trainer(object):
             epoch_time = time.time()-epoch_start
             # updating the batch dynamically
             # self.train_loader.sampler.update_load(self.timer, 100)
-            #if (epoch == 1):
-            # pass the dynamic_step argument here
-            self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
+            if (dynamic == 0 and epoch == 1) or dynamic > 0:
+                self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
             print('Epoch: {}/{},'.format(epoch, epochs),
                 'train loss: {}, train acc: {},'.format(train_loss, train_acc),
                 'test loss: {}, test acc: {}.'.format(test_loss, test_acc),
@@ -121,8 +121,6 @@ class Trainer(object):
 
     def train(self):
         train_loss = Average()
-        train_acc = Accuracy()
-        
         begin_time = time.time()
 
         print("Self.net.train: ", time.time()-begin_time)
@@ -135,13 +133,15 @@ class Trainer(object):
         load_timer = 0
         count = 0
         load_start = time.time()
-        self.net.train()
+
         i = 0
+        self.net.train()
         for data, label in self.train_loader:
             load_timer += time.time()-load_start
             #start_time = time.time()
             data = data.cuda(non_blocking=True)
             label = label.cuda(non_blocking=True)
+
             # forward is called here
             forward_start = time.time()
             output = self.net(data)
@@ -157,32 +157,31 @@ class Trainer(object):
             loss.backward()
             
             opti_start = time.time()
-            backward_timer += opti_start-backward_start
+            backward_timer += opti_start - backward_start
             self.optimizer.step()
             
             update_start = time.time()
             opti_timer += update_start - opti_start
             train_loss.update(loss.item(), data.size(0))
-            train_acc.update(output, label)
-            # train_f1.update(output, label)
             update_timer += time.time() - update_start
             # total_timer += time.time() - start_time
             load_start = time.time()
 
             i += 1
             if i % 100 == 0:
-                print('Iter {}, Train Loss: {}, Train Acc: {}'.format(i+1, train_loss, train_acc))
+                print('Iter {}, Train Loss: {}'.format(i+1, train_loss))
         self.timer = forward_timer
         print("Forward Time : {}s".format(forward_timer))
         print("Loss", loss_timer, "Backward", backward_timer, "Opti", opti_timer)
         print("Update Time", update_timer)
         print("Load Time", load_timer)
         print("---")
-        return train_loss, train_acc
+        return train_loss
 
     def evaluate(self):
         test_loss = Average()
         test_acc = Accuracy()
+        test_f1 = F1_Score()
 
         self.net.eval()
         with torch.no_grad():
@@ -195,8 +194,9 @@ class Trainer(object):
 
                 test_loss.update(loss.item(), data.size(0))
                 test_acc.update(output, label)
+                test_f1.update(output, label)
 
-        return test_loss, test_acc
+        return test_loss, test_acc, test_f1
 
 
 class RNN(nn.Module):   
@@ -221,7 +221,7 @@ class RNN(nn.Module):
 
 
 def get_dataloader(root, batch_size, workers = 0):
-    amazon = DatasetAmazon(root)
+    amazon = DatasetAmazon(root, 2650000)
     train_length = int(0.9 * len(amazon))
     test_length = len(amazon)-train_length
     amz_train, amz_test = random_split(amazon,(train_length,test_length))
@@ -241,7 +241,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
     parser.add_argument("--dir", type=str, default='data.h5')
-    parser.add_argument("--batch", type=int, default=32)
+    parser.add_argument("--batch", type=int, default=64)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--n_vocab", type=int, default=1e4)
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     dynamic_step = args.dynamic
 
     # Starting Learning Rate
-    starting_lr = 0.05
+    starting_lr = 0.1
 
     # Distributed backend type
     dist_backend = 'nccl'
@@ -300,7 +300,7 @@ if __name__ == '__main__':
     print("Initialize Dataloaders...")
     train_loader, test_loader = get_dataloader(args.dir, batch_size, workers)
     print("Training...")
-    trainer = Trainer(model, optimizer, train_loader, test_loader, loss)
+    trainer = Trainer(model, optimizer, train_loader, test_loader, loss, dynamic_step)
     trainer.fit(num_epochs)
 
     print("Total time: {:.3f}s".format(time.time()-initial_time))
