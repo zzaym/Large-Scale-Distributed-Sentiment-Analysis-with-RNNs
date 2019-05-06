@@ -15,5 +15,5 @@ class DatasetAmazon(Dataset):
         line = self.f[self.keyname[int(index/self.size)]][index%self.size]
         text = line[:-1] # up to the last one is text
         label = line[-1:]
-        label = (label > 3) * 1
+        # label = (label > 3) * 1
         return torch.LongTensor(text), torch.LongTensor(label)
