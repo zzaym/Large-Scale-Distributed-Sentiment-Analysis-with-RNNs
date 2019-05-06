@@ -246,7 +246,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--local_rank", type=int)
     parser.add_argument("--dir", type=str, default='data.h5')
-    parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--batch", type=int, default=128)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--workers", type=int, default=0)
@@ -257,6 +257,9 @@ if __name__ == '__main__':
     
     # number of vocabulary
     num_vocab = args.n_vocab
+
+    # location of data file
+    path = args.dir
    
     # Starting Learning Rate
     lr = args.lr
@@ -307,10 +310,10 @@ if __name__ == '__main__':
     # define loss function (criterion) and optimizer
     weight = torch.FloatTensor([0.2]).cuda()
     loss = nn.BCEWithLogitsLoss(pos_weight=weight).cuda()
-    optimizer = torch.optim.Adam(model.parameters(), lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
 
     print("Initialize Dataloaders...")
-    train_loader, test_loader = get_dataloader(args.dir, batch_size, workers)
+    train_loader, test_loader = get_dataloader(path, batch_size, workers)
     print("Training...")
     trainer = Trainer(model, optimizer, train_loader, test_loader, loss, dynamic_step, filename)
     trainer.fit(num_epochs)
