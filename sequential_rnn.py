@@ -7,26 +7,18 @@ import sys
 import torch
 import argparse
 import torch.nn as nn
-import torch.nn.parallel
-import torch.distributed as dist
 import torch.optim
 import torch.utils.data
-import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 from torch.autograd import Variable
-from torch.multiprocessing import Pool, Process
+#from torch.multiprocessing import Pool, Process
 from torch.utils.data import random_split
 import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.utils import data
-# from torch.utils.data.distributed import DistributedSampler
-from dynamic_dataloader import DynamicDistributedSampler as DistributedSampler
-from dynamic_dataloader import get_dynamic_loader
-# from dynamic_dataparallel import DistributedDataParallel
-from torch.nn.parallel.distributed import DistributedDataParallel
 from amz_loader import DatasetAmazon
 from sklearn.metrics import f1_score
 from RNN_model import RNN
@@ -101,27 +93,23 @@ class Trainer(object):
         self.test_loader = test_loader
         self.loss = loss
         self.timer = 0
-        self.total_batch = train_loader.batch_size*dist.get_world_size()
         self.dynamic = dynamic
         self.filename = filename
 
     def fit(self, epochs):
-        for epoch in range(1, epochs + 1):
-            epoch_start = time.time()
-            train_loss = self.train()
-            train_time = time.time() - epoch_start
-            print("Train Time: ", train_time)
-            test_loss, test_acc, test_f1 = self.evaluate()
-            epoch_time = time.time()-epoch_start
-            # updating the batch dynamically
-            # self.train_loader.sampler.update_load(self.timer, 100)
-            if (self.dynamic == 0 and epoch == 1) or self.dynamic > 0:
-                self.train_loader = get_dynamic_loader(self.train_loader, self.timer, self.total_batch)
-            print('Epoch: {}/{},'.format(epoch, epochs),
-                'train loss: {},'.format(train_loss),
-                'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
-                'epoch time: {}'.format(epoch_time), flush = True)
-            torch.save(self.net, self.filename)
+            for epoch in range(1, epochs + 1):
+                epoch_start = time.time()
+                train_loss = self.train()
+                train_time = time.time() - epoch_start
+                print("Train Time: ", train_time)
+                test_loss, test_acc, test_f1 = self.evaluate()
+                epoch_time = time.time()-epoch_start
+                print('Epoch: {}/{},'.format(epoch, epochs),
+                    'train loss: {},'.format(train_loss),
+                    'test loss: {}, test acc: {}, test f1: {}.'.format(test_loss, test_acc, test_f1),
+                    'epoch time: {}'.format(epoch_time), flush = True)
+                torch.save(self.net, self.filename)
+        
 
     def train(self):
         train_loss = Average()
@@ -205,12 +193,15 @@ class Trainer(object):
         return test_loss, test_acc, test_f1
 
 
+
+
+
 def get_dataloader(root, batch_size, workers = 0):
     amazon = DatasetAmazon(root)
     train_length = int(0.9 * len(amazon))
     test_length = len(amazon) - train_length
     amz_train, amz_test = random_split(amazon, (train_length,test_length))
-    sampler = DistributedSampler(amz_train)
+    sampler = None#DistributedSampler(amz_train)
     train_loader = data.DataLoader(amz_train, shuffle=(sampler is None), batch_size=batch_size, \
                         sampler=sampler, num_workers=workers, drop_last=True)
     test_loader = data.DataLoader(amz_test, shuffle=False, batch_size=batch_size, num_workers=workers, drop_last=True)
@@ -237,7 +228,7 @@ if __name__ == '__main__':
     
     # number of vocabulary
     num_vocab = args.n_vocab
-
+    
     # location of data file
     path = args.dir
    
@@ -262,30 +253,24 @@ if __name__ == '__main__':
     filename = args.filename
 
     # Distributed backend type
-    dist_backend = 'nccl'
     print("Data Directory: {}".format(args.dir))
     print("Batch Size: {}".format(batch_size))
     print("Learning rate: {}".format(lr))
     print("Max Number of Epochs: {}".format(num_epochs))
     print("Initialize Process Group...")
 
-    torch.cuda.set_device(args.local_rank)
-
-    torch.distributed.init_process_group(backend=dist_backend,
-                                         init_method='env://')
+    torch.cuda.set_device(0)
     torch.multiprocessing.set_start_method('spawn', force=True)
 
 
     # Establish Local Rank and set device on this node
-    local_rank = args.local_rank
-    dp_device_ids = [local_rank]
+    local_rank = 0
+    dp_device_ids = [0]
 
     print("Initialize Model...")
     # Construct Model
     model = RNN(num_vocab).cuda()
 
-    # Make model DistributedDataParallel
-    model = DistributedDataParallel(model, device_ids=dp_device_ids, output_device=local_rank)
 
     # define loss function (criterion) and optimizer
     weight = torch.FloatTensor([0.2]).cuda()
