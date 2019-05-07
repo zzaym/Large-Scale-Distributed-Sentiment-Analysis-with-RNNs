@@ -1,0 +1,1080 @@
+Collect Inputs...
+Data Directory: ../cloud/combined_result_5class.h5
+Batch Size: 128
+Learning rate: 0.1
+Max Number of Epochs: 10
+Initialize Process Group...
+Collect Inputs...
+Data Directory: ../cloud/combined_result_5class.h5
+Batch Size: 128
+Learning rate: 0.1
+Max Number of Epochs: 10
+Initialize Process Group...
+Collect Inputs...
+Data Directory: ../cloud/combined_result_5class.h5
+Batch Size: 128
+Learning rate: 0.1
+Max Number of Epochs: 10
+Initialize Process Group...
+Collect Inputs...
+Data Directory: ../cloud/combined_result_5class.h5
+Batch Size: 128
+Learning rate: 0.1
+Max Number of Epochs: 10
+Initialize Process Group...
+Initialize Model...
+Initialize Model...
+Initialize Model...
+Initialize Model...
+Initialize Dataloaders...
+Initialize Dataloaders...
+Initialize Dataloaders...
+Initialize Dataloaders...
+Training...
+Self.net.train:  1.9073486328125e-06
+Training...
+Self.net.train:  1.6689300537109375e-06
+Training...
+Self.net.train:  2.1457672119140625e-06
+Training...
+Self.net.train:  1.6689300537109375e-06
+Iter 2000, Train Loss: 0.254066
+Iter 2000, Train Loss: 0.254870
+Iter 2000, Train Loss: 0.254745
+Iter 2000, Train Loss: 0.254408
+Iter 4000, Train Loss: 0.254718
+Iter 4000, Train Loss: 0.254229
+Iter 4000, Train Loss: 0.254621
+Iter 4000, Train Loss: 0.254617
+Iter 6000, Train Loss: 0.254379
+Iter 6000, Train Loss: 0.254558
+Iter 6000, Train Loss: 0.254571
+Iter 6000, Train Loss: 0.254610
+Iter 8000, Train Loss: 0.253161
+Iter 8000, Train Loss: 0.253160
+Iter 8000, Train Loss: 0.253347
+Iter 8000, Train Loss: 0.253090
+Iter 10000, Train Loss: 0.242948
+Iter 10000, Train Loss: 0.242973
+Iter 10000, Train Loss: 0.242934
+Iter 10000, Train Loss: 0.243204
+Iter 12000, Train Loss: 0.230851
+Iter 12000, Train Loss: 0.230989
+Iter 12000, Train Loss: 0.230970
+Iter 12000, Train Loss: 0.230850
+Iter 14000, Train Loss: 0.220976
+Iter 14000, Train Loss: 0.220902
+Iter 14000, Train Loss: 0.220806
+Iter 14000, Train Loss: 0.220907
+Iter 16000, Train Loss: 0.212686
+Iter 16000, Train Loss: 0.212728
+Iter 16000, Train Loss: 0.212555
+Iter 16000, Train Loss: 0.212547
+Iter 18000, Train Loss: 0.205943
+Iter 18000, Train Loss: 0.205799
+Iter 18000, Train Loss: 0.205739
+Iter 18000, Train Loss: 0.205860
+Iter 20000, Train Loss: 0.200263
+Iter 20000, Train Loss: 0.200167
+Iter 20000, Train Loss: 0.200173
+Iter 20000, Train Loss: 0.200128
+Iter 22000, Train Loss: 0.195384
+Iter 22000, Train Loss: 0.195313
+Iter 22000, Train Loss: 0.195419
+Iter 22000, Train Loss: 0.195393
+Iter 24000, Train Loss: 0.191398
+Iter 24000, Train Loss: 0.191365
+Iter 24000, Train Loss: 0.191181
+Iter 24000, Train Loss: 0.191338
+Iter 26000, Train Loss: 0.187904
+Iter 26000, Train Loss: 0.187827
+Iter 26000, Train Loss: 0.187797
+Iter 26000, Train Loss: 0.187717
+Iter 28000, Train Loss: 0.184656
+Iter 28000, Train Loss: 0.184622
+Iter 28000, Train Loss: 0.184833
+Iter 28000, Train Loss: 0.184691
+Iter 30000, Train Loss: 0.181965
+Iter 30000, Train Loss: 0.181916
+Iter 30000, Train Loss: 0.181812
+Iter 30000, Train Loss: 0.182001
+Iter 32000, Train Loss: 0.179351
+Iter 32000, Train Loss: 0.179500
+Iter 32000, Train Loss: 0.179520
+Iter 32000, Train Loss: 0.179509
+Iter 34000, Train Loss: 0.177307
+Iter 34000, Train Loss: 0.177291
+Iter 34000, Train Loss: 0.177289
+Iter 34000, Train Loss: 0.177166
+Iter 36000, Train Loss: 0.175285
+Iter 36000, Train Loss: 0.175157
+Iter 36000, Train Loss: 0.175245
+Iter 36000, Train Loss: 0.175312
+Forward Time : 188.17469453811646s
+Loss Time:  17.07356882095337 Backward Time:  325.4373826980591 Opti Time:  28.049173831939697
+Update Time 413.0876262187958
+Load Time 74.18912529945374
+------------------------------------------
+Train Time:  1055.8250422477722
+Forward Time : 186.97310304641724s
+Loss Time:  16.7782199382782 Backward Time:  328.1684126853943 Opti Time:  28.50705623626709
+Update Time 411.1201729774475
+Load Time 74.2654800415039
+------------------------------------------
+Train Time:  1055.8647034168243
+Forward Time : 204.24482917785645s
+Loss Time:  17.571577787399292 Backward Time:  313.4128255844116 Opti Time:  27.695837020874023
+Update Time 406.4428679943085
+Load Time 76.09383392333984
+------------------------------------------
+Train Time:  1055.8014097213745
+Forward Time : 186.77833914756775s
+Loss Time:  17.263366222381592 Backward Time:  330.16931343078613 Opti Time:  27.338476181030273
+Update Time 409.88808393478394
+Load Time 74.27362489700317
+------------------------------------------
+Train Time:  1056.6810700893402
+Epoch: 1/10, train loss: 0.174012, test loss: 0.140828, test acc: 77.40%, test f1: 0.84. epoch time: 1317.1078746318817
+Self.net.train:  1.430511474609375e-06
+Epoch: 1/10, train loss: 0.173924, test loss: 0.141030, test acc: 77.32%, test f1: 0.84. epoch time: 1318.9832623004913
+Self.net.train:  1.430511474609375e-06
+Epoch: 1/10, train loss: 0.174012, test loss: 0.141093, test acc: 77.32%, test f1: 0.84. epoch time: 1321.727873325348
+Self.net.train:  1.1920928955078125e-06
+Epoch: 1/10, train loss: 0.174072, test loss: 0.141038, test acc: 77.34%, test f1: 0.84. epoch time: 1327.1578640937805
+Self.net.train:  1.1920928955078125e-06
+Iter 2000, Train Loss: 0.140019
+Iter 2000, Train Loss: 0.140534
+Iter 2000, Train Loss: 0.141186
+Iter 2000, Train Loss: 0.140528
+Iter 4000, Train Loss: 0.140228
+Iter 4000, Train Loss: 0.139852
+Iter 4000, Train Loss: 0.140594
+Iter 4000, Train Loss: 0.140027
+Iter 6000, Train Loss: 0.140200
+Iter 6000, Train Loss: 0.139610
+Iter 6000, Train Loss: 0.139924
+Iter 6000, Train Loss: 0.139811
+Iter 8000, Train Loss: 0.139485
+Iter 8000, Train Loss: 0.139550
+Iter 8000, Train Loss: 0.140114
+Iter 8000, Train Loss: 0.139793
+Iter 10000, Train Loss: 0.139832
+Iter 10000, Train Loss: 0.139404
+Iter 10000, Train Loss: 0.139191
+Iter 10000, Train Loss: 0.139326
+Iter 12000, Train Loss: 0.139191
+Iter 12000, Train Loss: 0.139141
+Iter 12000, Train Loss: 0.139034
+Iter 12000, Train Loss: 0.139407
+Iter 14000, Train Loss: 0.138980
+Iter 14000, Train Loss: 0.139133
+Iter 14000, Train Loss: 0.139034
+Iter 14000, Train Loss: 0.139353
+Iter 16000, Train Loss: 0.138974
+Iter 16000, Train Loss: 0.139167
+Iter 16000, Train Loss: 0.138967
+Iter 16000, Train Loss: 0.138735
+Iter 18000, Train Loss: 0.138668
+Iter 18000, Train Loss: 0.138810
+Iter 18000, Train Loss: 0.139045
+Iter 18000, Train Loss: 0.138803
+Iter 20000, Train Loss: 0.138640
+Iter 20000, Train Loss: 0.138863
+Iter 20000, Train Loss: 0.138520
+Iter 20000, Train Loss: 0.138712
+Iter 22000, Train Loss: 0.138511
+Iter 22000, Train Loss: 0.138619
+Iter 22000, Train Loss: 0.138377
+Iter 22000, Train Loss: 0.138533
+Iter 24000, Train Loss: 0.138494
+Iter 24000, Train Loss: 0.138291
+Iter 24000, Train Loss: 0.138541
+Iter 24000, Train Loss: 0.138246
+Iter 26000, Train Loss: 0.138426
+Iter 26000, Train Loss: 0.138181
+Iter 26000, Train Loss: 0.138185
+Iter 26000, Train Loss: 0.138304
+Iter 28000, Train Loss: 0.138318
+Iter 28000, Train Loss: 0.138050
+Iter 28000, Train Loss: 0.137977
+Iter 28000, Train Loss: 0.138165
+Iter 30000, Train Loss: 0.138097
+Iter 30000, Train Loss: 0.137843
+Iter 30000, Train Loss: 0.138058
+Iter 30000, Train Loss: 0.137856
+Iter 32000, Train Loss: 0.137909
+Iter 32000, Train Loss: 0.137938
+Iter 32000, Train Loss: 0.137745
+Iter 32000, Train Loss: 0.137716
+Iter 34000, Train Loss: 0.137739
+Iter 34000, Train Loss: 0.137601
+Iter 34000, Train Loss: 0.137596
+Iter 34000, Train Loss: 0.137799
+Iter 36000, Train Loss: 0.137461
+Iter 36000, Train Loss: 0.137662
+Iter 36000, Train Loss: 0.137411
+Iter 36000, Train Loss: 0.137601
+Forward Time : 194.52614378929138s
+Loss Time:  17.96390128135681 Backward Time:  329.4540627002716 Opti Time:  27.95454430580139
+Update Time 402.09635400772095
+Load Time 79.26623225212097
+------------------------------------------
+Train Time:  1061.4365708827972
+Forward Time : 195.73577570915222s
+Loss Time:  17.74828577041626 Backward Time:  326.69188141822815 Opti Time:  29.37273621559143
+Update Time 398.0538237094879
+Load Time 74.29710006713867
+------------------------------------------
+Train Time:  1052.1675176620483
+Forward Time : 192.74091482162476s
+Loss Time:  16.25698184967041 Backward Time:  311.8919813632965 Opti Time:  26.30360507965088
+Update Time 428.8936083316803
+Load Time 71.45935821533203
+------------------------------------------
+Train Time:  1057.467479467392
+Forward Time : 180.7212414741516s
+Loss Time:  16.197185754776 Backward Time:  326.54097986221313 Opti Time:  26.87553334236145
+Update Time 426.14785718917847
+Load Time 73.9718656539917
+------------------------------------------
+Train Time:  1060.5301835536957
+Epoch: 2/10, train loss: 0.137505, test loss: 0.135159, test acc: 79.05%, test f1: 0.84. epoch time: 1316.599190235138
+Self.net.train:  2.384185791015625e-06
+Epoch: 2/10, train loss: 0.137592, test loss: 0.135149, test acc: 79.06%, test f1: 0.85. epoch time: 1321.6590609550476
+Self.net.train:  3.337860107421875e-06
+Epoch: 2/10, train loss: 0.137350, test loss: 0.134947, test acc: 79.10%, test f1: 0.85. epoch time: 1332.8929870128632
+Self.net.train:  2.86102294921875e-06
+Epoch: 2/10, train loss: 0.137396, test loss: 0.135063, test acc: 79.06%, test f1: 0.84. epoch time: 1331.8269107341766
+Self.net.train:  2.6226043701171875e-06
+Iter 2000, Train Loss: 0.134910
+Iter 2000, Train Loss: 0.134503
+Iter 2000, Train Loss: 0.134822
+Iter 2000, Train Loss: 0.135460
+Iter 4000, Train Loss: 0.134689
+Iter 4000, Train Loss: 0.134311
+Iter 4000, Train Loss: 0.135122
+Iter 4000, Train Loss: 0.134399
+Iter 6000, Train Loss: 0.134205
+Iter 6000, Train Loss: 0.134837
+Iter 6000, Train Loss: 0.134568
+Iter 6000, Train Loss: 0.134258
+Iter 8000, Train Loss: 0.134187
+Iter 8000, Train Loss: 0.134301
+Iter 8000, Train Loss: 0.134375
+Iter 8000, Train Loss: 0.134891
+Iter 10000, Train Loss: 0.134174
+Iter 10000, Train Loss: 0.134746
+Iter 10000, Train Loss: 0.134050
+Iter 10000, Train Loss: 0.134114
+Iter 12000, Train Loss: 0.134428
+Iter 12000, Train Loss: 0.134157
+Iter 12000, Train Loss: 0.133972
+Iter 12000, Train Loss: 0.133979
+Iter 14000, Train Loss: 0.134447
+Iter 14000, Train Loss: 0.134121
+Iter 14000, Train Loss: 0.134098
+Iter 14000, Train Loss: 0.134023
+Iter 16000, Train Loss: 0.134333
+Iter 16000, Train Loss: 0.133888
+Iter 16000, Train Loss: 0.134193
+Iter 16000, Train Loss: 0.134028
+Iter 18000, Train Loss: 0.134312
+Iter 18000, Train Loss: 0.134108
+Iter 18000, Train Loss: 0.133976
+Iter 18000, Train Loss: 0.133907
+Iter 20000, Train Loss: 0.134037
+Iter 20000, Train Loss: 0.134233
+Iter 20000, Train Loss: 0.133836
+Iter 20000, Train Loss: 0.133962
+Iter 22000, Train Loss: 0.133789
+Iter 22000, Train Loss: 0.134000
+Iter 22000, Train Loss: 0.134080
+Iter 22000, Train Loss: 0.133871
+Iter 24000, Train Loss: 0.134035
+Iter 24000, Train Loss: 0.133767
+Iter 24000, Train Loss: 0.133808
+Iter 24000, Train Loss: 0.133965
+Iter 26000, Train Loss: 0.134018
+Iter 26000, Train Loss: 0.133808
+Iter 26000, Train Loss: 0.133738
+Iter 26000, Train Loss: 0.133803
+Iter 28000, Train Loss: 0.133965
+Iter 28000, Train Loss: 0.133613
+Iter 28000, Train Loss: 0.133742
+Iter 28000, Train Loss: 0.133742
+Iter 30000, Train Loss: 0.133803
+Iter 30000, Train Loss: 0.133606
+Iter 30000, Train Loss: 0.133706
+Iter 30000, Train Loss: 0.133543
+Iter 32000, Train Loss: 0.133536
+Iter 32000, Train Loss: 0.133672
+Iter 32000, Train Loss: 0.133511
+Iter 32000, Train Loss: 0.133645
+Iter 34000, Train Loss: 0.133559
+Iter 34000, Train Loss: 0.133480
+Iter 34000, Train Loss: 0.133425
+Iter 34000, Train Loss: 0.133579
+Iter 36000, Train Loss: 0.133487
+Iter 36000, Train Loss: 0.133289
+Iter 36000, Train Loss: 0.133387
+Iter 36000, Train Loss: 0.133493
+Forward Time : 201.576411485672s
+Loss Time:  18.19753360748291 Backward Time:  332.20944380760193 Opti Time:  30.20360541343689
+Update Time 382.4824848175049
+Load Time 76.56997442245483
+------------------------------------------
+Train Time:  1051.9157276153564
+Forward Time : 191.64708375930786s
+Loss Time:  16.162672996520996 Backward Time:  307.8676426410675 Opti Time:  25.965335369110107
+Update Time 438.4212656021118
+Load Time 72.53313064575195
+------------------------------------------
+Train Time:  1062.3683245182037
+Forward Time : 180.51083660125732s
+Loss Time:  16.169708013534546 Backward Time:  324.4056375026703 Opti Time:  26.727158069610596
+Update Time 421.92886424064636
+Load Time 70.51546001434326
+------------------------------------------
+Train Time:  1050.1353425979614
+Forward Time : 190.7409210205078s
+Loss Time:  17.03602647781372 Backward Time:  314.775639295578 Opti Time:  26.35508894920349
+Update Time 417.15506386756897
+Load Time 73.93998265266418
+------------------------------------------
+Train Time:  1050.2722821235657
+Epoch: 3/10, train loss: 0.133359, test loss: 0.132175, test acc: 80.55%, test f1: 0.85. epoch time: 1313.3030397891998
+Self.net.train:  2.6226043701171875e-06
+Epoch: 3/10, train loss: 0.133256, test loss: 0.132079, test acc: 80.60%, test f1: 0.85. epoch time: 1314.0036211013794
+Self.net.train:  3.337860107421875e-06
+Epoch: 3/10, train loss: 0.133470, test loss: 0.132266, test acc: 80.55%, test f1: 0.85. epoch time: 1319.6095659732819
+Self.net.train:  2.1457672119140625e-06
+Epoch: 3/10, train loss: 0.133432, test loss: 0.132271, test acc: 80.55%, test f1: 0.85. epoch time: 1331.539824962616
+Self.net.train:  4.291534423828125e-06
+Iter 2000, Train Loss: 0.131729
+Iter 2000, Train Loss: 0.132325
+Iter 2000, Train Loss: 0.131684
+Iter 2000, Train Loss: 0.131552
+Iter 4000, Train Loss: 0.132123
+Iter 4000, Train Loss: 0.131575
+Iter 4000, Train Loss: 0.131393
+Iter 4000, Train Loss: 0.131404
+Iter 6000, Train Loss: 0.131618
+Iter 6000, Train Loss: 0.131327
+Iter 6000, Train Loss: 0.131788
+Iter 6000, Train Loss: 0.131268
+Iter 8000, Train Loss: 0.131911
+Iter 8000, Train Loss: 0.131314
+Iter 8000, Train Loss: 0.131368
+Iter 8000, Train Loss: 0.131437
+Iter 10000, Train Loss: 0.131338
+Iter 10000, Train Loss: 0.131793
+Iter 10000, Train Loss: 0.131148
+Iter 10000, Train Loss: 0.131243
+Iter 12000, Train Loss: 0.131523
+Iter 12000, Train Loss: 0.131375
+Iter 12000, Train Loss: 0.131151
+Iter 12000, Train Loss: 0.131107
+Iter 14000, Train Loss: 0.131228
+Iter 14000, Train Loss: 0.131594
+Iter 14000, Train Loss: 0.131288
+Iter 14000, Train Loss: 0.131347
+Iter 16000, Train Loss: 0.131119
+Iter 16000, Train Loss: 0.131440
+Iter 16000, Train Loss: 0.131255
+Iter 16000, Train Loss: 0.131512
+Iter 18000, Train Loss: 0.131540
+Iter 18000, Train Loss: 0.131179
+Iter 18000, Train Loss: 0.131391
+Iter 18000, Train Loss: 0.131226
+Iter 20000, Train Loss: 0.131491
+Iter 20000, Train Loss: 0.131358
+Iter 20000, Train Loss: 0.131135
+Iter 20000, Train Loss: 0.131237
+Iter 22000, Train Loss: 0.131363
+Iter 22000, Train Loss: 0.131104
+Iter 22000, Train Loss: 0.131353
+Iter 22000, Train Loss: 0.131174
+Iter 24000, Train Loss: 0.131194
+Iter 24000, Train Loss: 0.131348
+Iter 24000, Train Loss: 0.131293
+Iter 24000, Train Loss: 0.131089
+Iter 26000, Train Loss: 0.131360
+Iter 26000, Train Loss: 0.131103
+Iter 26000, Train Loss: 0.131203
+Iter 26000, Train Loss: 0.131145
+Iter 28000, Train Loss: 0.131176
+Iter 28000, Train Loss: 0.131004
+Iter 28000, Train Loss: 0.131322
+Iter 28000, Train Loss: 0.131107
+Iter 30000, Train Loss: 0.131070
+Iter 30000, Train Loss: 0.131190
+Iter 30000, Train Loss: 0.131105
+Iter 30000, Train Loss: 0.130963
+Iter 32000, Train Loss: 0.131083
+Iter 32000, Train Loss: 0.130955
+Iter 32000, Train Loss: 0.131023
+Iter 32000, Train Loss: 0.131078
+Iter 34000, Train Loss: 0.130990
+Iter 34000, Train Loss: 0.130901
+Iter 34000, Train Loss: 0.130987
+Iter 34000, Train Loss: 0.131035
+Iter 36000, Train Loss: 0.130916
+Iter 36000, Train Loss: 0.130973
+Iter 36000, Train Loss: 0.130788
+Iter 36000, Train Loss: 0.130947
+Forward Time : 188.53653073310852s
+Loss Time:  15.935896158218384 Backward Time:  305.0055320262909 Opti Time:  25.64823627471924
+Update Time 427.8697838783264
+Load Time 68.38730216026306
+------------------------------------------
+Train Time:  1040.7519083023071
+Forward Time : 197.94699573516846s
+Loss Time:  17.71116614341736 Backward Time:  336.1178123950958 Opti Time:  29.962148666381836
+Update Time 373.2870397567749
+Load Time 76.8179657459259
+------------------------------------------
+Train Time:  1042.3932728767395
+Forward Time : 179.11731147766113s
+Loss Time:  16.065340518951416 Backward Time:  324.1486551761627 Opti Time:  26.43464970588684
+Update Time 419.27394008636475
+Load Time 72.1514983177185
+------------------------------------------
+Train Time:  1046.843008518219
+Forward Time : 183.02324724197388s
+Loss Time:  15.82908034324646 Backward Time:  304.8663651943207 Opti Time:  24.69330668449402
+Update Time 432.9367935657501
+Load Time 75.31223273277283
+------------------------------------------
+Train Time:  1046.3841364383698
+Epoch: 4/10, train loss: 0.130764, test loss: 0.132581, test acc: 82.10%, test f1: 0.85. epoch time: 1306.785804271698
+Self.net.train:  3.0994415283203125e-06
+Epoch: 4/10, train loss: 0.130903, test loss: 0.132691, test acc: 82.06%, test f1: 0.85. epoch time: 1309.3965396881104
+Self.net.train:  3.0994415283203125e-06
+Epoch: 4/10, train loss: 0.130960, test loss: 0.132702, test acc: 82.09%, test f1: 0.85. epoch time: 1307.441124677658
+Epoch: 4/10, train loss: 0.130903, test loss: 0.132742, test acc: 82.08%, test f1: 0.85. epoch time: 1305.8907299041748
+Self.net.train:  3.814697265625e-06
+Self.net.train:  3.337860107421875e-06
+Iter 2000, Train Loss: 0.130149
+Iter 2000, Train Loss: 0.129504
+Iter 2000, Train Loss: 0.129433
+Iter 2000, Train Loss: 0.129502
+Iter 4000, Train Loss: 0.129994
+Iter 4000, Train Loss: 0.129432
+Iter 4000, Train Loss: 0.129267
+Iter 4000, Train Loss: 0.129330
+Iter 6000, Train Loss: 0.129713
+Iter 6000, Train Loss: 0.129590
+Iter 6000, Train Loss: 0.129285
+Iter 6000, Train Loss: 0.129203
+Iter 8000, Train Loss: 0.129327
+Iter 8000, Train Loss: 0.129294
+Iter 8000, Train Loss: 0.129401
+Iter 8000, Train Loss: 0.129869
+Iter 10000, Train Loss: 0.129130
+Iter 10000, Train Loss: 0.129785
+Iter 10000, Train Loss: 0.129220
+Iter 10000, Train Loss: 0.129321
+Iter 12000, Train Loss: 0.129374
+Iter 12000, Train Loss: 0.129535
+Iter 12000, Train Loss: 0.129119
+Iter 12000, Train Loss: 0.129141
+Iter 14000, Train Loss: 0.129263
+Iter 14000, Train Loss: 0.129394
+Iter 14000, Train Loss: 0.129598
+Iter 14000, Train Loss: 0.129311
+Iter 16000, Train Loss: 0.129178
+Iter 16000, Train Loss: 0.129504
+Iter 16000, Train Loss: 0.129289
+Iter 16000, Train Loss: 0.129552
+Iter 18000, Train Loss: 0.129596
+Iter 18000, Train Loss: 0.129238
+Iter 18000, Train Loss: 0.129469
+Iter 18000, Train Loss: 0.129281
+Iter 20000, Train Loss: 0.129580
+Iter 20000, Train Loss: 0.129439
+Iter 20000, Train Loss: 0.129212
+Iter 20000, Train Loss: 0.129295
+Iter 22000, Train Loss: 0.129196
+Iter 22000, Train Loss: 0.129458
+Iter 22000, Train Loss: 0.129251
+Iter 22000, Train Loss: 0.129452
+Iter 24000, Train Loss: 0.129440
+Iter 24000, Train Loss: 0.129328
+Iter 24000, Train Loss: 0.129379
+Iter 24000, Train Loss: 0.129196
+Iter 26000, Train Loss: 0.129468
+Iter 26000, Train Loss: 0.129349
+Iter 26000, Train Loss: 0.129227
+Iter 26000, Train Loss: 0.129260
+Iter 28000, Train Loss: 0.129438
+Iter 28000, Train Loss: 0.129338
+Iter 28000, Train Loss: 0.129226
+Iter 28000, Train Loss: 0.129141
+Iter 30000, Train Loss: 0.129232
+Iter 30000, Train Loss: 0.129241
+Iter 30000, Train Loss: 0.129320
+Iter 30000, Train Loss: 0.129122
+Iter 32000, Train Loss: 0.129115
+Iter 32000, Train Loss: 0.129203
+Iter 32000, Train Loss: 0.129232
+Iter 32000, Train Loss: 0.129224
+Iter 34000, Train Loss: 0.129081
+Iter 34000, Train Loss: 0.129184
+Iter 34000, Train Loss: 0.129192
+Iter 34000, Train Loss: 0.129152
+Iter 36000, Train Loss: 0.128982
+Iter 36000, Train Loss: 0.129128
+Iter 36000, Train Loss: 0.129127
+Iter 36000, Train Loss: 0.129144
+Forward Time : 193.92185926437378s
+Loss Time:  17.577030658721924 Backward Time:  322.3561849594116 Opti Time:  28.43808102607727
+Update Time 404.46606040000916
+Load Time 77.56030368804932
+------------------------------------------
+Train Time:  1054.3682401180267
+Forward Time : 201.65199613571167s
+Loss Time:  17.342129945755005 Backward Time:  305.72985076904297 Opti Time:  27.409690141677856
+Update Time 415.4817395210266
+Load Time 74.46813344955444
+------------------------------------------
+Train Time:  1051.9628977775574
+Forward Time : 189.15213751792908s
+Loss Time:  16.441669464111328 Backward Time:  307.84480142593384 Opti Time:  25.74901294708252
+Update Time 434.0962200164795
+Load Time 73.66925764083862
+------------------------------------------
+Train Time:  1056.5016553401947
+Forward Time : 187.7623381614685s
+Loss Time:  16.761760473251343 Backward Time:  333.4321310520172 Opti Time:  28.523306846618652
+Update Time 399.9923949241638
+Load Time 75.29534816741943
+------------------------------------------
+Train Time:  1052.1478922367096
+Epoch: 5/10, train loss: 0.129130, test loss: 0.137723, test acc: 82.87%, test f1: 0.85. epoch time: 1319.717698097229
+Self.net.train:  2.1457672119140625e-06
+Epoch: 5/10, train loss: 0.129148, test loss: 0.137652, test acc: 82.89%, test f1: 0.85. epoch time: 1318.7815835475922
+Self.net.train:  5.0067901611328125e-06
+Epoch: 5/10, train loss: 0.129083, test loss: 0.137760, test acc: 82.88%, test f1: 0.85. epoch time: 1323.9572494029999
+Self.net.train:  2.384185791015625e-06
+Epoch: 5/10, train loss: 0.128966, test loss: 0.137590, test acc: 82.90%, test f1: 0.85. epoch time: 1333.1557631492615
+Self.net.train:  3.337860107421875e-06
+Iter 2000, Train Loss: 0.127813
+Iter 2000, Train Loss: 0.128556
+Iter 2000, Train Loss: 0.128018
+Iter 2000, Train Loss: 0.127976
+Iter 4000, Train Loss: 0.127948
+Iter 4000, Train Loss: 0.128366
+Iter 4000, Train Loss: 0.127701
+Iter 4000, Train Loss: 0.127749
+Iter 6000, Train Loss: 0.128200
+Iter 6000, Train Loss: 0.128016
+Iter 6000, Train Loss: 0.127647
+Iter 6000, Train Loss: 0.127666
+Iter 8000, Train Loss: 0.128371
+Iter 8000, Train Loss: 0.127797
+Iter 8000, Train Loss: 0.127724
+Iter 8000, Train Loss: 0.127848
+Iter 10000, Train Loss: 0.127636
+Iter 10000, Train Loss: 0.128280
+Iter 10000, Train Loss: 0.127703
+Iter 10000, Train Loss: 0.127802
+Iter 12000, Train Loss: 0.127631
+Iter 12000, Train Loss: 0.127632
+Iter 12000, Train Loss: 0.128041
+Iter 12000, Train Loss: 0.127860
+Iter 14000, Train Loss: 0.128107
+Iter 14000, Train Loss: 0.127795
+Iter 14000, Train Loss: 0.127893
+Iter 14000, Train Loss: 0.127794
+Iter 16000, Train Loss: 0.127703
+Iter 16000, Train Loss: 0.127786
+Iter 16000, Train Loss: 0.128082
+Iter 16000, Train Loss: 0.128010
+Iter 18000, Train Loss: 0.127985
+Iter 18000, Train Loss: 0.127776
+Iter 18000, Train Loss: 0.128134
+Iter 18000, Train Loss: 0.127787
+Iter 20000, Train Loss: 0.128128
+Iter 20000, Train Loss: 0.127974
+Iter 20000, Train Loss: 0.127757
+Iter 20000, Train Loss: 0.127822
+Iter 22000, Train Loss: 0.127754
+Iter 22000, Train Loss: 0.127999
+Iter 22000, Train Loss: 0.127797
+Iter 22000, Train Loss: 0.128017
+Iter 24000, Train Loss: 0.128007
+Iter 24000, Train Loss: 0.127901
+Iter 24000, Train Loss: 0.127932
+Iter 24000, Train Loss: 0.127764
+Iter 26000, Train Loss: 0.127934
+Iter 26000, Train Loss: 0.128038
+Iter 26000, Train Loss: 0.127800
+Iter 26000, Train Loss: 0.127817
+Iter 28000, Train Loss: 0.127925
+Iter 28000, Train Loss: 0.128016
+Iter 28000, Train Loss: 0.127782
+Iter 28000, Train Loss: 0.127721
+Iter 30000, Train Loss: 0.127911
+Iter 30000, Train Loss: 0.127709
+Iter 30000, Train Loss: 0.127818
+Iter 30000, Train Loss: 0.127831
+Iter 32000, Train Loss: 0.127707
+Iter 32000, Train Loss: 0.127820
+Iter 32000, Train Loss: 0.127837
+Iter 32000, Train Loss: 0.127814
+Iter 34000, Train Loss: 0.127682
+Iter 34000, Train Loss: 0.127772
+Iter 34000, Train Loss: 0.127808
+Iter 34000, Train Loss: 0.127796
+Iter 36000, Train Loss: 0.127588
+Iter 36000, Train Loss: 0.127761
+Iter 36000, Train Loss: 0.127761
+Iter 36000, Train Loss: 0.127758
+Forward Time : 191.9272985458374s
+Loss Time:  16.775705575942993 Backward Time:  311.68621253967285 Opti Time:  26.12262511253357
+Update Time 416.283260345459
+Load Time 72.97124981880188
+------------------------------------------
+Train Time:  1045.3411962985992
+Forward Time : 197.28727102279663s
+Loss Time:  16.722646713256836 Backward Time:  304.430641412735 Opti Time:  26.6555917263031
+Update Time 424.11982440948486
+Load Time 71.33796811103821
+------------------------------------------
+Train Time:  1050.129642009735
+Forward Time : 190.7048740386963s
+Loss Time:  17.12031388282776 Backward Time:  323.39409732818604 Opti Time:  27.902249097824097
+Update Time 412.1613459587097
+Load Time 75.66142678260803
+------------------------------------------
+Train Time:  1056.8677699565887
+Forward Time : 180.2386176586151s
+Loss Time:  16.031005144119263 Backward Time:  327.41945934295654 Opti Time:  27.431528091430664
+Update Time 415.3434362411499
+Load Time 78.78129959106445
+------------------------------------------
+Train Time:  1055.4776630401611
+Epoch: 6/10, train loss: 0.127771, test loss: 0.140807, test acc: 83.01%, test f1: 0.85. epoch time: 1319.4961712360382
+Self.net.train:  3.337860107421875e-06
+Epoch: 6/10, train loss: 0.127723, test loss: 0.140820, test acc: 83.00%, test f1: 0.85. epoch time: 1313.0663619041443
+Self.net.train:  2.86102294921875e-06
+Epoch: 6/10, train loss: 0.127766, test loss: 0.140693, test acc: 83.01%, test f1: 0.86. epoch time: 1318.3062717914581
+Self.net.train:  1.9073486328125e-06
+Epoch: 6/10, train loss: 0.127573, test loss: 0.140639, test acc: 83.04%, test f1: 0.85. epoch time: 1319.2648017406464
+Self.net.train:  2.1457672119140625e-06
+Iter 2000, Train Loss: 0.127266
+Iter 2000, Train Loss: 0.126746
+Iter 2000, Train Loss: 0.126757
+Iter 2000, Train Loss: 0.126617
+Iter 4000, Train Loss: 0.127193
+Iter 4000, Train Loss: 0.126706
+Iter 4000, Train Loss: 0.126494
+Iter 4000, Train Loss: 0.126520
+Iter 6000, Train Loss: 0.126447
+Iter 6000, Train Loss: 0.126988
+Iter 6000, Train Loss: 0.126450
+Iter 6000, Train Loss: 0.126868
+Iter 8000, Train Loss: 0.127175
+Iter 8000, Train Loss: 0.126639
+Iter 8000, Train Loss: 0.126482
+Iter 8000, Train Loss: 0.126659
+Iter 10000, Train Loss: 0.127103
+Iter 10000, Train Loss: 0.126571
+Iter 10000, Train Loss: 0.126525
+Iter 10000, Train Loss: 0.126462
+Iter 12000, Train Loss: 0.126445
+Iter 12000, Train Loss: 0.126853
+Iter 12000, Train Loss: 0.126630
+Iter 12000, Train Loss: 0.126461
+Iter 14000, Train Loss: 0.126663
+Iter 14000, Train Loss: 0.126926
+Iter 14000, Train Loss: 0.126620
+Iter 14000, Train Loss: 0.126635
+Iter 16000, Train Loss: 0.126544
+Iter 16000, Train Loss: 0.126921
+Iter 16000, Train Loss: 0.126793
+Iter 16000, Train Loss: 0.126634
+Iter 18000, Train Loss: 0.126629
+Iter 18000, Train Loss: 0.126973
+Iter 18000, Train Loss: 0.126786
+Iter 18000, Train Loss: 0.126632
+Iter 20000, Train Loss: 0.126777
+Iter 20000, Train Loss: 0.126967
+Iter 20000, Train Loss: 0.126661
+Iter 20000, Train Loss: 0.126614
+Iter 22000, Train Loss: 0.126612
+Iter 22000, Train Loss: 0.126860
+Iter 22000, Train Loss: 0.126810
+Iter 22000, Train Loss: 0.126657
+Iter 24000, Train Loss: 0.126860
+Iter 24000, Train Loss: 0.126724
+Iter 24000, Train Loss: 0.126628
+Iter 24000, Train Loss: 0.126787
+Iter 26000, Train Loss: 0.126672
+Iter 26000, Train Loss: 0.126682
+Iter 26000, Train Loss: 0.126896
+Iter 26000, Train Loss: 0.126763
+Iter 28000, Train Loss: 0.126601
+Iter 28000, Train Loss: 0.126758
+Iter 28000, Train Loss: 0.126878
+Iter 28000, Train Loss: 0.126651
+Iter 30000, Train Loss: 0.126782
+Iter 30000, Train Loss: 0.126670
+Iter 30000, Train Loss: 0.126600
+Iter 30000, Train Loss: 0.126692
+Iter 32000, Train Loss: 0.126726
+Iter 32000, Train Loss: 0.126666
+Iter 32000, Train Loss: 0.126607
+Iter 32000, Train Loss: 0.126696
+Iter 34000, Train Loss: 0.126671
+Iter 34000, Train Loss: 0.126670
+Iter 34000, Train Loss: 0.126592
+Iter 34000, Train Loss: 0.126685
+Iter 36000, Train Loss: 0.126640
+Iter 36000, Train Loss: 0.126667
+Iter 36000, Train Loss: 0.126507
+Iter 36000, Train Loss: 0.126655
+Forward Time : 194.60252904891968s
+Loss Time:  16.359415292739868 Backward Time:  302.6826288700104 Opti Time:  26.063286542892456
+Update Time 431.43203568458557
+Load Time 73.48070502281189
+------------------------------------------
+Train Time:  1054.2808029651642
+Forward Time : 193.6876735687256s
+Loss Time:  17.325510501861572 Backward Time:  332.94597148895264 Opti Time:  29.28460168838501
+Update Time 391.1298623085022
+Load Time 79.24132776260376
+------------------------------------------
+Train Time:  1054.215325832367
+Forward Time : 179.71188497543335s
+Loss Time:  15.897185564041138 Backward Time:  324.0582528114319 Opti Time:  26.5566668510437
+Update Time 424.75364446640015
+Load Time 73.96842813491821
+------------------------------------------
+Train Time:  1054.572446346283
+Forward Time : 187.61500906944275s
+Loss Time:  16.28538465499878 Backward Time:  306.20857191085815 Opti Time:  25.469286918640137
+Update Time 423.597464799881
+Load Time 74.41958212852478
+------------------------------------------
+Train Time:  1043.3463101387024
+Epoch: 7/10, train loss: 0.126673, test loss: 0.143679, test acc: 83.33%, test f1: 0.86. epoch time: 1312.5957052707672
+Self.net.train:  3.5762786865234375e-06
+Epoch: 7/10, train loss: 0.126504, test loss: 0.143641, test acc: 83.36%, test f1: 0.86. epoch time: 1302.9538731575012
+Self.net.train:  2.384185791015625e-06
+Epoch: 7/10, train loss: 0.126655, test loss: 0.143825, test acc: 83.35%, test f1: 0.86. epoch time: 1318.8274185657501
+Self.net.train:  3.337860107421875e-06
+Epoch: 7/10, train loss: 0.126630, test loss: 0.143837, test acc: 83.31%, test f1: 0.86. epoch time: 1319.4960803985596
+Self.net.train:  2.1457672119140625e-06
+Iter 2000, Train Loss: 0.125780
+Iter 2000, Train Loss: 0.125709
+Iter 2000, Train Loss: 0.126367
+Iter 2000, Train Loss: 0.125587
+Iter 4000, Train Loss: 0.125798
+Iter 4000, Train Loss: 0.125507
+Iter 4000, Train Loss: 0.126176
+Iter 4000, Train Loss: 0.125463
+Iter 6000, Train Loss: 0.125859
+Iter 6000, Train Loss: 0.126090
+Iter 6000, Train Loss: 0.125465
+Iter 6000, Train Loss: 0.125433
+Iter 8000, Train Loss: 0.126241
+Iter 8000, Train Loss: 0.125647
+Iter 8000, Train Loss: 0.125658
+Iter 8000, Train Loss: 0.125489
+Iter 10000, Train Loss: 0.126163
+Iter 10000, Train Loss: 0.125482
+Iter 10000, Train Loss: 0.125616
+Iter 10000, Train Loss: 0.125544
+Iter 12000, Train Loss: 0.125678
+Iter 12000, Train Loss: 0.125469
+Iter 12000, Train Loss: 0.125493
+Iter 12000, Train Loss: 0.125924
+Iter 14000, Train Loss: 0.125726
+Iter 14000, Train Loss: 0.125971
+Iter 14000, Train Loss: 0.125649
+Iter 14000, Train Loss: 0.125676
+Iter 16000, Train Loss: 0.125580
+Iter 16000, Train Loss: 0.125978
+Iter 16000, Train Loss: 0.125869
+Iter 16000, Train Loss: 0.125675
+Iter 18000, Train Loss: 0.126047
+Iter 18000, Train Loss: 0.125670
+Iter 18000, Train Loss: 0.125860
+Iter 18000, Train Loss: 0.125687
+Iter 20000, Train Loss: 0.126043
+Iter 20000, Train Loss: 0.125860
+Iter 20000, Train Loss: 0.125654
+Iter 20000, Train Loss: 0.125728
+Iter 22000, Train Loss: 0.125894
+Iter 22000, Train Loss: 0.125946
+Iter 22000, Train Loss: 0.125661
+Iter 22000, Train Loss: 0.125718
+Iter 24000, Train Loss: 0.125688
+Iter 24000, Train Loss: 0.125950
+Iter 24000, Train Loss: 0.125813
+Iter 24000, Train Loss: 0.125849
+Iter 26000, Train Loss: 0.125852
+Iter 26000, Train Loss: 0.125737
+Iter 26000, Train Loss: 0.125990
+Iter 26000, Train Loss: 0.125752
+Iter 28000, Train Loss: 0.125849
+Iter 28000, Train Loss: 0.125677
+Iter 28000, Train Loss: 0.125721
+Iter 28000, Train Loss: 0.125976
+Iter 30000, Train Loss: 0.125877
+Iter 30000, Train Loss: 0.125763
+Iter 30000, Train Loss: 0.125768
+Iter 30000, Train Loss: 0.125671
+Iter 32000, Train Loss: 0.125818
+Iter 32000, Train Loss: 0.125761
+Iter 32000, Train Loss: 0.125779
+Iter 32000, Train Loss: 0.125678
+Iter 34000, Train Loss: 0.125774
+Iter 34000, Train Loss: 0.125766
+Iter 34000, Train Loss: 0.125764
+Iter 34000, Train Loss: 0.125665
+Iter 36000, Train Loss: 0.125584
+Iter 36000, Train Loss: 0.125734
+Iter 36000, Train Loss: 0.125730
+Iter 36000, Train Loss: 0.125774
+Forward Time : 197.64514660835266s
+Loss Time:  16.703558206558228 Backward Time:  303.0144770145416 Opti Time:  26.56243324279785
+Update Time 411.5141599178314
+Load Time 71.24810433387756
+------------------------------------------
+Train Time:  1036.265388250351
+Forward Time : 187.98268795013428s
+Loss Time:  16.694543600082397 Backward Time:  330.9595808982849 Opti Time:  28.571589946746826
+Update Time 393.66172432899475
+Load Time 75.07796835899353
+------------------------------------------
+Train Time:  1043.0952036380768
+Forward Time : 182.79247403144836s
+Loss Time:  16.23601722717285 Backward Time:  323.36449217796326 Opti Time:  26.89646577835083
+Update Time 406.4535276889801
+Load Time 71.94466614723206
+------------------------------------------
+Train Time:  1037.280378818512
+Forward Time : 189.12948203086853s
+Loss Time:  16.47507882118225 Backward Time:  306.5568678379059 Opti Time:  25.753905773162842
+Update Time 421.8021352291107
+Load Time 72.5883584022522
+------------------------------------------
+Train Time:  1042.015242099762
+Epoch: 8/10, train loss: 0.125738, test loss: 0.145530, test acc: 83.97%, test f1: 0.86. epoch time: 1297.6753363609314
+Self.net.train:  2.1457672119140625e-06
+Epoch: 8/10, train loss: 0.125751, test loss: 0.145526, test acc: 83.98%, test f1: 0.86. epoch time: 1302.3398365974426
+Self.net.train:  3.0994415283203125e-06
+Epoch: 8/10, train loss: 0.125750, test loss: 0.145352, test acc: 83.97%, test f1: 0.86. epoch time: 1312.4490313529968
+Self.net.train:  2.384185791015625e-06
+Epoch: 8/10, train loss: 0.125581, test loss: 0.145318, test acc: 84.00%, test f1: 0.86. epoch time: 1312.9424362182617
+Self.net.train:  3.0994415283203125e-06
+Iter 2000, Train Loss: 0.124826
+Iter 2000, Train Loss: 0.124713
+Iter 2000, Train Loss: 0.124958
+Iter 2000, Train Loss: 0.125457
+Iter 4000, Train Loss: 0.124897
+Iter 4000, Train Loss: 0.124689
+Iter 4000, Train Loss: 0.125310
+Iter 4000, Train Loss: 0.124706
+Iter 6000, Train Loss: 0.125024
+Iter 6000, Train Loss: 0.125250
+Iter 6000, Train Loss: 0.124665
+Iter 6000, Train Loss: 0.124620
+Iter 8000, Train Loss: 0.124679
+Iter 8000, Train Loss: 0.125420
+Iter 8000, Train Loss: 0.124828
+Iter 8000, Train Loss: 0.124854
+Iter 10000, Train Loss: 0.125345
+Iter 10000, Train Loss: 0.124804
+Iter 10000, Train Loss: 0.124733
+Iter 10000, Train Loss: 0.124661
+Iter 12000, Train Loss: 0.124653
+Iter 12000, Train Loss: 0.124892
+Iter 12000, Train Loss: 0.125104
+Iter 12000, Train Loss: 0.124699
+Iter 14000, Train Loss: 0.124913
+Iter 14000, Train Loss: 0.125171
+Iter 14000, Train Loss: 0.124831
+Iter 14000, Train Loss: 0.124881
+Iter 16000, Train Loss: 0.125052
+Iter 16000, Train Loss: 0.124887
+Iter 16000, Train Loss: 0.125175
+Iter 16000, Train Loss: 0.124756
+Iter 18000, Train Loss: 0.125232
+Iter 18000, Train Loss: 0.124855
+Iter 18000, Train Loss: 0.125056
+Iter 18000, Train Loss: 0.124888
+Iter 20000, Train Loss: 0.125223
+Iter 20000, Train Loss: 0.124845
+Iter 20000, Train Loss: 0.125060
+Iter 20000, Train Loss: 0.124922
+Iter 22000, Train Loss: 0.125141
+Iter 22000, Train Loss: 0.125111
+Iter 22000, Train Loss: 0.124919
+Iter 22000, Train Loss: 0.124858
+Iter 24000, Train Loss: 0.124891
+Iter 24000, Train Loss: 0.125145
+Iter 24000, Train Loss: 0.125061
+Iter 24000, Train Loss: 0.125027
+Iter 26000, Train Loss: 0.124957
+Iter 26000, Train Loss: 0.125183
+Iter 26000, Train Loss: 0.125065
+Iter 26000, Train Loss: 0.124961
+Iter 28000, Train Loss: 0.125173
+Iter 28000, Train Loss: 0.125062
+Iter 28000, Train Loss: 0.124899
+Iter 28000, Train Loss: 0.124934
+Iter 30000, Train Loss: 0.124975
+Iter 30000, Train Loss: 0.125077
+Iter 30000, Train Loss: 0.124892
+Iter 30000, Train Loss: 0.124988
+Iter 32000, Train Loss: 0.124901
+Iter 32000, Train Loss: 0.125022
+Iter 32000, Train Loss: 0.124981
+Iter 32000, Train Loss: 0.124995
+Iter 34000, Train Loss: 0.124894
+Iter 34000, Train Loss: 0.124988
+Iter 34000, Train Loss: 0.124985
+Iter 34000, Train Loss: 0.124982
+Iter 36000, Train Loss: 0.124990
+Iter 36000, Train Loss: 0.124817
+Iter 36000, Train Loss: 0.124964
+Iter 36000, Train Loss: 0.124956
+Forward Time : 202.5762333869934s
+Loss Time:  18.2947199344635 Backward Time:  338.8329129219055 Opti Time:  30.243212461471558
+Update Time 369.13141989707947
+Load Time 77.94037008285522
+------------------------------------------
+Train Time:  1048.036113023758
+Forward Time : 183.72924661636353s
+Loss Time:  15.88695502281189 Backward Time:  304.25906109809875 Opti Time:  24.951446533203125
+Update Time 434.90408182144165
+Load Time 72.80835390090942
+------------------------------------------
+Train Time:  1046.3002455234528
+Forward Time : 191.76530027389526s
+Loss Time:  16.05772566795349 Backward Time:  303.0750331878662 Opti Time:  25.834975004196167
+Update Time 437.43771386146545
+Load Time 72.10137629508972
+------------------------------------------
+Train Time:  1056.0781407356262
+Forward Time : 177.87405586242676s
+Loss Time:  15.738945245742798 Backward Time:  325.89663076400757 Opti Time:  26.190219163894653
+Update Time 426.72018909454346
+Load Time 70.0621087551117
+------------------------------------------
+Train Time:  1052.359070777893
+Epoch: 9/10, train loss: 0.124982, test loss: 0.144273, test acc: 83.57%, test f1: 0.86. epoch time: 1309.2238945960999
+Self.net.train:  2.6226043701171875e-06
+Epoch: 9/10, train loss: 0.124963, test loss: 0.144463, test acc: 83.56%, test f1: 0.86. epoch time: 1317.3260941505432
+Self.net.train:  3.0994415283203125e-06
+Epoch: 9/10, train loss: 0.124816, test loss: 0.144241, test acc: 83.60%, test f1: 0.86. epoch time: 1307.9368257522583
+Self.net.train:  3.814697265625e-06
+Epoch: 9/10, train loss: 0.124987, test loss: 0.144455, test acc: 83.58%, test f1: 0.86. epoch time: 1314.0504794120789
+Self.net.train:  2.1457672119140625e-06
+Iter 2000, Train Loss: 0.124789
+Iter 2000, Train Loss: 0.123951
+Iter 2000, Train Loss: 0.124280
+Iter 2000, Train Loss: 0.124174
+Iter 4000, Train Loss: 0.124612
+Iter 4000, Train Loss: 0.123971
+Iter 4000, Train Loss: 0.123969
+Iter 4000, Train Loss: 0.124280
+Iter 6000, Train Loss: 0.123933
+Iter 6000, Train Loss: 0.124300
+Iter 6000, Train Loss: 0.124581
+Iter 6000, Train Loss: 0.123955
+Iter 8000, Train Loss: 0.124110
+Iter 8000, Train Loss: 0.123985
+Iter 8000, Train Loss: 0.124728
+Iter 8000, Train Loss: 0.124141
+Iter 10000, Train Loss: 0.123977
+Iter 10000, Train Loss: 0.124110
+Iter 10000, Train Loss: 0.124649
+Iter 10000, Train Loss: 0.124027
+Iter 12000, Train Loss: 0.124394
+Iter 12000, Train Loss: 0.123987
+Iter 12000, Train Loss: 0.123965
+Iter 12000, Train Loss: 0.124191
+Iter 14000, Train Loss: 0.124237
+Iter 14000, Train Loss: 0.124156
+Iter 14000, Train Loss: 0.124177
+Iter 14000, Train Loss: 0.124469
+Iter 16000, Train Loss: 0.124377
+Iter 16000, Train Loss: 0.124105
+Iter 16000, Train Loss: 0.124182
+Iter 16000, Train Loss: 0.124468
+Iter 18000, Train Loss: 0.124206
+Iter 18000, Train Loss: 0.124371
+Iter 18000, Train Loss: 0.124199
+Iter 18000, Train Loss: 0.124532
+Iter 20000, Train Loss: 0.124525
+Iter 20000, Train Loss: 0.124201
+Iter 20000, Train Loss: 0.124369
+Iter 20000, Train Loss: 0.124223
+Iter 22000, Train Loss: 0.124444
+Iter 22000, Train Loss: 0.124420
+Iter 22000, Train Loss: 0.124214
+Iter 22000, Train Loss: 0.124217
+Iter 24000, Train Loss: 0.124250
+Iter 24000, Train Loss: 0.124356
+Iter 24000, Train Loss: 0.124457
+Iter 24000, Train Loss: 0.124345
+Iter 26000, Train Loss: 0.124312
+Iter 26000, Train Loss: 0.124388
+Iter 26000, Train Loss: 0.124268
+Iter 26000, Train Loss: 0.124482
+Iter 28000, Train Loss: 0.124477
+Iter 28000, Train Loss: 0.124393
+Iter 28000, Train Loss: 0.124255
+Iter 28000, Train Loss: 0.124245
+Iter 30000, Train Loss: 0.124380
+Iter 30000, Train Loss: 0.124254
+Iter 30000, Train Loss: 0.124310
+Iter 30000, Train Loss: 0.124299
+Iter 32000, Train Loss: 0.124329
+Iter 32000, Train Loss: 0.124264
+Iter 32000, Train Loss: 0.124313
+Iter 32000, Train Loss: 0.124322
+Iter 34000, Train Loss: 0.124259
+Iter 34000, Train Loss: 0.124328
+Iter 34000, Train Loss: 0.124295
+Iter 34000, Train Loss: 0.124314
+Iter 36000, Train Loss: 0.124185
+Iter 36000, Train Loss: 0.124302
+Iter 36000, Train Loss: 0.124289
+Iter 36000, Train Loss: 0.124304
+Forward Time : 189.3944447040558s
+Loss Time:  16.796498775482178 Backward Time:  335.46361470222473 Opti Time:  26.7179913520813
+Update Time 384.53526425361633
+Load Time 76.55913925170898
+------------------------------------------
+Train Time:  1039.6289110183716
+Forward Time : 188.8011770248413s
+Loss Time:  16.812628507614136 Backward Time:  328.84316205978394 Opti Time:  28.491323232650757
+Update Time 391.7914969921112
+Load Time 75.19268870353699
+------------------------------------------
+Train Time:  1039.794457912445
+Forward Time : 181.96992707252502s
+Loss Time:  15.71149730682373 Backward Time:  310.2608880996704 Opti Time:  24.748956441879272
+Update Time 424.5809578895569
+Load Time 72.5978615283966
+------------------------------------------
+Train Time:  1039.3428111076355
+Forward Time : 176.53349542617798s
+Loss Time:  15.603157043457031 Backward Time:  332.19900488853455 Opti Time:  26.01961088180542
+Update Time 408.14200949668884
+Load Time 71.1826844215393
+------------------------------------------
+Train Time:  1039.1668028831482
+Epoch: 10/10, train loss: 0.124183, test loss: 0.145043, test acc: 84.29%, test f1: 0.86. epoch time: 1301.2555239200592
+Total time: 13155.792s
+Epoch: 10/10, train loss: 0.124276, test loss: 0.145260, test acc: 84.27%, test f1: 0.86. epoch time: 1301.672085762024
+Total time: 13155.953s
+Epoch: 10/10, train loss: 0.124315, test loss: 0.145070, test acc: 84.28%, test f1: 0.86. epoch time: 1301.91517162323
+Total time: 13155.992s
+Epoch: 10/10, train loss: 0.124329, test loss: 0.145259, test acc: 84.27%, test f1: 0.86. epoch time: 1301.6173083782196
+Total time: 13156.384s
