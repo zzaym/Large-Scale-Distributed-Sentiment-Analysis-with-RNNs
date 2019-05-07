@@ -8,14 +8,14 @@ from collections import Counter
 import boto3
 import socket
 
+binary_dict = {1:0,2:0,3:0,4:1,5:1}
+
 s3 = boto3.client('s3')
 s3.download_file('cs205amazonreview','vocab_10000.json','vocab_10000.json')
 
 with open('vocab_10000.json') as f:
     vocab_dict = json.load(f)
     f.close()
-
-binary_dict = {1:0,2:0,3:0,4:1,5:1}
 
 def tokenize(text, text_size = 100):
     # 1: padding
