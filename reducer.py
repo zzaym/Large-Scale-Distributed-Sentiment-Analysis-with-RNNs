@@ -8,14 +8,14 @@ from collections import Counter
 import boto3
 import socket
 
+binary_dict = {1:0,2:0,3:0,4:1,5:1}
+
 s3 = boto3.client('s3')
 s3.download_file('cs205amazonreview','vocab_10000.json','vocab_10000.json')
 
 with open('vocab_10000.json') as f:
     vocab_dict = json.load(f)
     f.close()
-
-binary_dict = {1:0,2:0,3:0,4:1,5:1}
 
 def tokenize(text, text_size = 100):
     # 1: padding
@@ -30,9 +30,11 @@ def tokenize(text, text_size = 100):
         result.append(1)
     return result
 
+h5file = h5py.File("result.h5", "w")
+
+review_id = 0
 prev_text = None
 scores = []
-data = []
 
 for line in sys.stdin:
     try:
@@ -44,7 +46,9 @@ for line in sys.stdin:
                 top_scores.sort()
                 output = tokenize(prev_text)
                 output.append(binary_dict[int(top_scores[0][0])])
-                data.append(output)
+                output = np.array(output)
+                dset = h5file.create_dataset(str(review_id),output.shape,output.dtype,data = output)
+                review_id += 1
             prev_text = text
             scores = []
         scores.append(score[:-1])
@@ -55,11 +59,10 @@ if prev_text is not None:
     top_scores.sort()
     output = tokenize(prev_text)
     output.append(binary_dict[int(top_scores[0][0])])
-    data.append(output)
+    output = np.array(output)
+    dset = h5file.create_dataset(str(review_id),output.shape,output.dtype,data = output)
+    review_id += 1
 
-data = np.array(data)
-h5file = h5py.File("result.h5", "w")
-dset = h5file.create_dataset('data',data.shape,data.dtype,data = data)
 h5file.close()
 
 node_name = socket.gethostname()
