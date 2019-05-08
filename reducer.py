@@ -1,5 +1,11 @@
 #!/usr/bin/python
 
+'''
+This file is used to change words to their respective index according to a pre-loaded dictionary, 
+truncate or pad each sentence to make it a pre-specified fixed length(100), 
+remove duplicate and keep the mode of ratings and map ratings to binary sentiment indicator
+'''
+
 import sys
 import json
 import h5py
