@@ -2,6 +2,12 @@ from torch.utils.data import Dataset
 import torch
 import h5pickle as h5py
 
+'''
+Class DatasetAmazon: customized dataset class inheriting from torch dataset module, which works with PyTorch distributed computing modules.
+The __init__ function reads multiple files stored in a single h5py dataset as input. 
+__ getitem__ method will read the next file of input once the current file is exhausted.
+'''
+
 class DatasetAmazon(Dataset):
     def __init__(self, path):
         self.f = h5py.File(path,'r')
