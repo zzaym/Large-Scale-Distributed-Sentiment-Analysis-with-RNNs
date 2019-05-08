@@ -2,6 +2,11 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
+'''
+Classifier class for sentiment analysis. Input is fixed length float vector representing a truncated sentence. 
+Output is sentiment score
+'''
+
 class RNN(nn.Module):   
     def __init__(self, n_vocab):
         super().__init__()
