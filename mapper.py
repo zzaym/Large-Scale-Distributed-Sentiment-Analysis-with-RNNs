@@ -1,5 +1,7 @@
 #!/usr/bin/python
-
+'''
+This file is used to remove stop words, punctuations from raw text and transform text to lower case.
+'''
 import sys
 import json
 import numpy as np
