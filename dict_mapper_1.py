@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+'''
+Reads in text and outputs a list of [word 1].
+'''
+
 import sys
 
 for line in sys.stdin:
