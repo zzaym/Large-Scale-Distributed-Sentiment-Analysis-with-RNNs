@@ -56,6 +56,7 @@ class Accuracy(object):
         self.count = 0
 
     def update(self, output, label):
+        # accumulate counts necessary for acc calculation
         pred = output.ge(torch.zeros_like(output)).long().data
         correct = pred.eq(label.data).sum().item()
 
@@ -64,6 +65,7 @@ class Accuracy(object):
 
     @property
     def accuracy(self):
+        # perform calculation of accuracy with stored statistics
         return self.correct / self.count
 
     def __str__(self):
