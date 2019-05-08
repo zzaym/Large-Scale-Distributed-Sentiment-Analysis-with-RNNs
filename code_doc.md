@@ -2,7 +2,9 @@
 Class RNN:  classifier for sentiment analysis. Input is fixed length float vector representing a truncated sentence. Output is sentiment score.
 
 ### amz_loader.py
-Class DatasetAmazon: customized dataset class inheriting from torch dataset module, reading multiple files stored in a single h5py dataset as input. __ getitem__ method will read the next file of input once the current file is exhausted.
+Class DatasetAmazon: customized dataset class inheriting from torch dataset module, which works with PyTorch distributed computing modules.
+__init__ function reads multiple files stored in a single h5py dataset as input. 
+__getitem__ method will read the next file of input once the current file is exhausted.
 
 ### combine_h5.py 
 Execute this file to combine several h5py file into a single h5py file. Key is file name. Value corresponding to each key is a numpy array storing data chunk.
