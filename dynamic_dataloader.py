@@ -1,3 +1,8 @@
+'''
+DYNAMIC LOAD BALANCER
+
+redistributes the data load and batch size for each GPU based on their given runtime.
+'''
 import math
 import time
 import numpy as np
