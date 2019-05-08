@@ -71,6 +71,9 @@ class Accuracy(object):
 
 
 class F1_Score(object):
+    ''' 
+    accumulate statistics for F1 score for every batch trained, but only calculate F1 score when an epoch is finished
+    '''
     def __init__(self):
         self.pos = torch.zeros(1)
         self.tp = torch.zeros(1)
@@ -86,9 +89,12 @@ class F1_Score(object):
         
     @property
     def f1_score(self):
+        ''' 
+        this function gives equal weights to both classes when calculating F1 score
+        '''
         precision = self.tp.div(self.pos.add(self.eps))
         recall = self.tp.div(self.tp.add(self.fn).add(self.eps))
-        return (precision*recall).div(precision+recall+self.eps).mul(2).item()
+        return (precision*recall).div(precision+recall+self.eps).mul(2).item() 
     
     def __str__(self):
         return '{:.2f}'.format(self.f1_score)
