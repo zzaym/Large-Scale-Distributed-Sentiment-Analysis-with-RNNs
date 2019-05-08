@@ -31,6 +31,7 @@ from amz_loader import DatasetAmazon
 from sklearn.metrics import f1_score
 from RNN_model import RNN
 
+# the framework is inspired and adapted from https://pytorch.org/tutorials/beginner/aws_distributed_training_tutorial.html
 
 class Average(object):
     def __init__(self):
