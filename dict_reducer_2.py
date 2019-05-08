@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+'''
+Reads in a reversely sorted list of [count word] and generates dictionary for the 10000 most frequent words.
+'''
+
 import sys
 
 vocab_size = 10000
