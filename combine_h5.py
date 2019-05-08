@@ -2,6 +2,11 @@ import boto3
 import h5py
 import numpy as np
 
+'''
+Execute this file to combine several h5py file into a single h5py file. Key is file name. 
+Value corresponding to each key is a numpy array storing data chunk.
+'''
+
 bucket = 'bucket'
 filenames = ['file1.h5', 'file2.h5']
 combined_filename = 'combined.h5'
