@@ -45,7 +45,7 @@ Dynamic load balancer is developed to solve the imbalanced issue while using mix
 
 # How to use?
 
-Please first download the source code in this repo, then take 0.5~1 hour (WARNING) to follow this reproduction instruction.
+Please first download the source code in this repo (the specific description is available [here](code_doc.md)), then take 0.5~1 hour (WARNING) to follow this reproduction instruction.
 
 ## I. Data Preprocessing 
 
@@ -318,6 +318,7 @@ Node 2:
 
 ## All Data Files and Test Cases
 
+All files are stored in S3 bucket.
   * 0.1% data: [link](https://s3.amazonaws.com/cs205amazonreview/14000.json)
   * 25% data: [link](https://s3.amazonaws.com/cs205amazonreview/35000000.json)
   * 50% data: [link](https://s3.amazonaws.com/cs205amazonreview/70000000.json)
