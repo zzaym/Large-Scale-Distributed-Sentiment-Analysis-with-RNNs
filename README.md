@@ -313,7 +313,7 @@ Node 2:
 
 
 ### CUDA Information
-![p](cuda_info.png)
+![p](img/cuda_info.png)
 
 
 ## All Data Files and Test Cases
