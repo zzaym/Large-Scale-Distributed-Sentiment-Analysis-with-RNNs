@@ -13,11 +13,17 @@ from torch.utils.data.distributed import DistributedSampler
 import torch.distributed as dist
 
 def undo_cumulative_sum(arr):
+    '''
+    Reverses the cumulative sum operation given a list of cumulative sum elements.
+    '''
     res = arr.copy()
     res[1:] -= res[:-1]
     return res
 
 def get_batch_data_split(perc_arr, total_batch, total_data):
+    '''
+    Returns the corresponding batch size split and cumulated data split based on runtime % of each GPU. This basically computes the data load and batch size that each GPU should be assigned based on their runtime.
+    '''
     cum = perc_arr.cumsum()
     cum[-1] = 1.
     # find the split of batch for each GPU
@@ -32,6 +38,9 @@ def get_batch_data_split(perc_arr, total_batch, total_data):
     return batch_size_split, sampler_split
 
 def get_dynamic_loader(loader, time_taken, total_batch):
+    '''
+    Returns a new data loader based on dynamic load balancer. The new data loader is assigned with a new split of data and batch size given the run time of each GPU.
+    '''
     overhead = time.time()
     sampler = loader.sampler
     total_data = sampler.total_size
