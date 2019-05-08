@@ -1,4 +1,7 @@
 #!/usr/bin/python
+'''
+Reads in a list of [word 1], counts number of occurrences for each word, and ouputs a list of [word count].
+'''
 
 import sys
 
