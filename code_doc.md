@@ -1,5 +1,5 @@
 ### RNN_model.py
-Class RNN:  classifier for sentiment analysis. Input is fixed length float vector representing a truncated sentence.
+Class RNN:  classifier for sentiment analysis. Input is fixed length float vector representing a truncated sentence. Output is sentiment score.
 
 ### amz_loader.py
 Class DatasetAmazon: customized dataset class inheriting from torch dataset module, reading multiple files stored in a single h5py dataset as input. __ getitem__ method will read the next file of input once the current file is exhausted.
