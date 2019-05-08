@@ -24,9 +24,15 @@ Reads in a reversely sorted list of [count word] and generates dictionary for th
 ### dynamic_dataloader.py
 undo_cumulative_sum:
 
-get_batch_data_split
+Reverses the cumulative sum operation given a list of cumulative sum elements.
 
-get_dynamic_loader
+get_batch_data_split:
+
+Returns the corresponding batch size split and cumulated data split based on runtime % of each GPU. This basically computes the data load and batch size that each GPU should be assigned based on their runtime. 
+
+get_dynamic_loader:
+
+Returns a new data loader based on dynamic load balancer. The new data loader is assigned with a new split of data and batch size given the run time of each GPU. 
 
 ### dynamic_rnn.py
 + metric classes: Average, F1_score, and Accuracy:
