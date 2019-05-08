@@ -1,4 +1,4 @@
-# Large Scale Distributed Sentiment Analysis With RNNs
+# Large-Scale Distributed Sentiment Analysis With RNNs
 
 Harvard CS205 Final Project, Spring 2019
 
