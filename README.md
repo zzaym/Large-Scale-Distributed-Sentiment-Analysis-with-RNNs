@@ -4,6 +4,7 @@ Harvard CS205 Final Project, Spring 2019
 
 Jianzhun Du, Rong Liu, Matteo Zhang, Yan Zhao
 
+
 # Introduction 
 
 In the current era, social medias are so common that people are constantly expressing their feelings through text. There are tremendous business values underlying this information. **Therefore, we hope to perform sentiment analysis with Recurrent Neural Networks (RNN) in order to uncover whether a piece of text has positive or negative sentiment.** 
@@ -15,8 +16,31 @@ We employ MapReduce on AWS cluster to first preprocess the large amount of data.
 We demonstrate the details of this project in [here](https://sophieyanzhao.github.io). 
 
 
- 
+# Main Features
 
+## Data Processing with MapReduce
+
+  * ***Mapper***: 
+    - Extract relevant information
+  * ***Reducer***: 
+    - Remove duplicates of text and keep the mode of the ratings
+    - Map ratings to binary sentiment indicators
+    - Map words to numbers
+    - Truncate or pad text sequences to achieve fixed length
+   
+![p](img/MapReduce_Illustration.png)
+ 
+## RNN + SGD - Distributed Parallelization
+
+Parallelize through PyTorch distributed parallel module with CUDA, using MPI-like interface with NCCL backend for inter-GPU communication.
+
+![p](img/Pytorch_flow.png)
+
+## Advanced: Dynamic Load Balancer
+
+Dynamic load balancer is developed to solve the imbalanced issue while using mixed GPUs (different capability of processing data), which work seamlessly with `DistributedSampler` in Pytorch. 
+
+![p](img/dynamic_load_balancer.png)
 
 
 # How to use?
@@ -290,3 +314,11 @@ Node 2:
 
 ### CUDA Information
 ![p](cuda_info.png)
+
+
+## All Data Files and Test Cases
+
+  * 0.1% data: [link](https://s3.amazonaws.com/cs205amazonreview/14000.json)
+  * 25% data: [link](https://s3.amazonaws.com/cs205amazonreview/35000000.json)
+  * 50% data: [link](https://s3.amazonaws.com/cs205amazonreview/70000000.json)
+  * Full data: [link](https://s3.amazonaws.com/cs205amazonreview/complete.json)
