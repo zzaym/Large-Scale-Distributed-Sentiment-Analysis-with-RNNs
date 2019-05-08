@@ -1,5 +1,11 @@
 """
-Adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS. This is our code baseline.
+SEQUENTIAL VERSION OF RNN
+
+Runs the RNN serially
+
+This is adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS.
+
+This is our code baseline.
 """
 
 import time

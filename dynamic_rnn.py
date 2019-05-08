@@ -1,5 +1,9 @@
 """
-Adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS
+DISTRIBUTED VERSION OF RNN
+
+Runs the RNN sentiment analysis in a distributed manner parallelizing the RNN and data sampler.  
+
+This framework is adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS
 """
 
 import time
