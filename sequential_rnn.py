@@ -1,5 +1,5 @@
 """
-Adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS
+Adapted from PyTorch 1.0 Distributed Trainer with Amazon AWS. This is our code baseline.
 """
 
 import time
