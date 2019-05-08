@@ -1,11 +1,23 @@
 ### RNN_model.py
-Class RNN:  classifier for sentiment analysis. Input is fixed length float vector representing a truncated sentence
+Class RNN:  classifier for sentiment analysis. Input is fixed length float vector representing a truncated sentence.
 
 ### amz_loader.py
 Class DatasetAmazon: customized dataset class inheriting from torch dataset module, reading multiple files stored in a single h5py dataset as input. __ getitem__ method will read the next file of input once the current file is exhausted.
 
-### combine_h5.py: 
+### combine_h5.py 
 Execute this file to combine several h5py file into a single h5py file. Key is file name. Value corresponding to each key is a numpy array storing data chunk.
+
+### dict_mapper_1.py
+Reads in text and outputs a list of [word 1].
+
+### dict_reducer_1.py
+Reads in a list of [word 1], counts number of occurrences for each word, and ouputs a list of [word count].
+
+### dict_mapper_2.py
+Reads in a list of [word count] and reorders to a list of [count word] to prepare for reverse sort.
+
+### dict_reducer_2.py
+Reads in a reversely sorted list of [count word] and generates dictionary for the 10000 most frequent words.
 
 ### dynamic_dataloader.py
 undo_cumulative_sum:
@@ -20,7 +32,7 @@ get_dynamic_loader
 + get_dataloader:create dataset object, randomly split into 90% training data and 10% test data.
 
 ### install_boto3_h5py.sh
-This file is used to perform bootstrap action in AWS EMR and install software
+This file is used to perform bootstrap action in AWS EMR and install software.
 
 ### mapper.py
 This file is used to remove stop words, punctuations from raw text and transform text to lower case.
